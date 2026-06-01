@@ -141,7 +141,128 @@
     </div>
   </section>
 
-  <!-- ============== 4. STILL HAND OASIS ============== -->
+  <!-- ============== 4. BREATHING (GUIDED) ============== -->
+  <section id="breathing" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
+    <div class="grid grid-cols-12 gap-6 mb-8">
+      <div class="col-span-12 sm:col-span-8 sm:col-start-1">
+        <p class="font-serif italic text-lavender text-sm mb-3">a small breath practice</p>
+        <h2 class="font-serif text-3xl sm:text-5xl text-ink leading-tight">
+          <span class="font-serif">Breathe</span>
+          <span class="italic text-ink/80">with me</span>
+        </h2>
+        <p class="text-ink/70 text-lg max-w-xl mt-4 leading-relaxed">
+          Choose a rhythm. Press start. No special technique—just a gentle tempo for your chest.
+        </p>
+      </div>
+
+      <div class="col-span-12 sm:col-span-4 sm:flex sm:items-end">
+        <div class="polaroid p-5 bg-paper/90 w-full">
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center justify-between">
+              <p class="font-serif italic text-ink/60 text-sm">preset</p>
+              <span id="breath-preset-label" class="font-serif italic text-ink/80 text-sm">4–4–6</span>
+            </div>
+
+            <div class="flex flex-wrap gap-2">
+              <button type="button" class="btn-ghost breath-preset active" data-preset="4-4-6" data-label="4–4–6">4–4–6</button>
+              <button type="button" class="btn-ghost breath-preset" data-preset="4-4-8" data-label="4–4–8">4–4–8</button>
+              <button type="button" class="btn-ghost breath-preset" data-preset="3-3-5" data-label="3–3–5">3–3–5</button>
+            </div>
+
+            <div class="flex items-center gap-3 mt-2">
+              <button id="breath-toggle" class="btn-primary" type="button">start gently</button>
+              <button id="breath-reset" class="btn-ghost" type="button">reset</button>
+            </div>
+
+            <p class="text-xs text-ink/45 font-serif italic" id="breath-status">
+              Not running.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="polaroid bg-paper/70 p-5 sm:p-7 overflow-hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <p class="text-sm text-ink/50 font-serif italic">cycle</p>
+          <div class="font-serif text-4xl sm:text-5xl text-ink/90">
+            <span id="breath-cycle">0</span><span class="text-ink/40 text-lg"> </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <div class="text-center">
+            <p class="text-sm text-ink/50 font-serif italic">phase</p>
+            <div class="font-serif text-3xl text-ink/90">
+              <span id="breath-phase">breathe in</span>
+            </div>
+          </div>
+
+          <div class="flex items-center">
+            <div class="breath-ring" aria-hidden="true">
+              <div class="breath-ring-inner"></div>
+              <div id="breath-ring-progress" class="breath-ring-progress"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="mt-4 text-xs text-ink/45 font-serif italic">
+        If you feel dizzy or uncomfortable, stop. Your nervous system deserves gentleness.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============== 5. GROUNDING 5-4-3-2-1 ============== -->
+  <section id="grounding" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
+    <div class="grid grid-cols-12 gap-6 mb-8">
+      <div class="col-span-12 sm:col-span-7">
+        <p class="font-serif italic text-teal text-sm mb-3">come back to the room</p>
+        <h2 class="font-serif text-3xl sm:text-5xl text-ink leading-tight">
+          <span>Five, four, three,</span><br/>
+          <span class="italic text-ink/80">two, one</span>
+        </h2>
+        <p class="text-ink/70 text-lg max-w-md mt-4 leading-relaxed">
+          Tap each sense when you have found one. You can go slowly.
+        </p>
+      </div>
+
+      <div class="col-span-12 sm:col-span-5 sm:col-start-8">
+        <div class="polaroid p-5 bg-paper/90">
+          <div class="flex items-center justify-between">
+            <p class="text-sm text-ink/50 font-serif italic">step</p>
+            <span id="ground-step-label" class="font-serif italic text-ink/80">1 / 5</span>
+          </div>
+
+          <div class="mt-4 flex flex-wrap gap-2" id="ground-step-buttons">
+            <button class="btn-ghost ground-step-btn active" data-step="5" type="button">5 things</button>
+            <button class="btn-ghost ground-step-btn" data-step="4" type="button">4 touch</button>
+            <button class="btn-ghost ground-step-btn" data-step="3" type="button">3 hear</button>
+            <button class="btn-ghost ground-step-btn" data-step="2" type="button">2 smell</button>
+            <button class="btn-ghost ground-step-btn" data-step="1" type="button">1 taste</button>
+          </div>
+
+          <div class="mt-4">
+            <p class="text-xs text-ink/45 font-serif italic" id="ground-instructions">
+              Find <span class="ground-sense">5</span> things you can see.
+            </p>
+
+            <div class="flex items-center gap-3 mt-3">
+              <button id="ground-next" class="btn-primary" type="button">next gently</button>
+              <button id="ground-reset" class="btn-ghost" type="button">start over</button>
+            </div>
+
+            <p id="ground-done" class="hidden text-lg font-serif italic text-teal mt-4">
+              You are here. That is the whole point.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 6. STILL HAND OASIS ============== -->
   <section id="oasis" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
     <div class="grid grid-cols-12 gap-6 mb-10">
       <div class="col-span-12 sm:col-span-7">
@@ -348,6 +469,37 @@
   <!-- ============== 7. SOFT BUBBLE POP (ambient, persistent corner) ============== -->
   <div id="bubble-field" class="bubble-field" aria-hidden="true"></div>
   <div id="bubble-whisper" class="bubble-whisper" aria-live="polite"></div>
+
+  <!-- ============== CRISIS / SAFETY INTERSTITIAL ============== -->
+  <div id="safety-modal" class="note-modal hidden" role="dialog" aria-modal="true" aria-labelledby="safety-title" aria-describedby="safety-body">
+    <div class="note-backdrop" tabindex="-1"></div>
+    <div class="note-card polaroid" tabindex="-1">
+      <p class="font-serif italic text-rose text-sm mb-2">safety</p>
+      <h2 id="safety-title" class="font-serif text-3xl text-ink mb-4">You deserve real help.</h2>
+      <div id="safety-body" class="font-serif text-ink/80 text-lg leading-relaxed space-y-3">
+        <p id="safety-copy">
+          If you might hurt yourself, or you feel in immediate danger, please talk to a real person right now.
+        </p>
+        <p class="text-xs text-ink/45 font-serif italic" id="safety-subcopy">
+          This page stays offline and does not place phone links. Numbers are shown for you to dial.
+        </p>
+
+        <div class="polaroid p-4 bg-paper/70">
+          <p class="font-serif italic text-ink/70 mb-2">Suggested options for your area:</p>
+          <ul id="safety-list" class="list-disc pl-5 space-y-1 text-ink/80"></ul>
+        </div>
+
+        <p class="text-sm text-ink/60 font-serif italic">
+          If you are in danger right now, prioritize emergency services or someone near you.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3 mt-6">
+        <button id="safety-continue" class="btn-primary" type="button">stay with me</button>
+        <button id="safety-close" class="btn-ghost" type="button">dismiss</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ============== 9. FOOTER ============== -->
   <footer class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-5xl mx-auto">
