@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#F4ECD8" />
+  <title>Being Enough — a small quiet place</title>
+  <meta name="description" content="A gentle, offline, no-score space for heavy, anxious, or lonely moments." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            wheat:    '#F4ECD8',
+            wheat2:   '#EFE3C5',
+            lavender: '#C9B8D8',
+            gold:     '#E8B86D',
+            teal:     '#7FB7B0',
+            night:    '#1B1A2E',
+            ink:      '#2A2522',
+            rose:     '#D89A9A',
+            paper:    '#FBF6E9',
+            moss:     '#8AA487'
+          },
+          fontFamily: {
+            serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            sans:  ['Inter', 'system-ui', 'sans-serif']
+          },
+          boxShadow: {
+            polaroid: '0 8px 24px rgba(42,37,34,0.08), 0 2px 6px rgba(42,37,34,0.05)',
+            soft:     '0 2px 10px rgba(42,37,34,0.06)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="font-sans bg-wheat text-ink antialiased min-h-screen overflow-x-hidden">
+
+  <!-- ============== AMBIENT BACKGROUND LAYER ============== -->
+  <div class="ambient" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+    <div class="leaves" id="leaves"></div>
+    <div class="fireflies" id="fireflies"></div>
+  </div>
+
+  <!-- ============== TOP BAR ============== -->
+  <header class="relative z-20 px-5 sm:px-10 pt-6 flex items-center justify-between">
+    <a href="#cover" class="font-serif italic text-lg sm:text-xl text-ink/80 hover:text-ink transition">
+      being&nbsp;enough<span class="text-gold">.</span>
+    </a>
+    <div class="flex items-center gap-2">
+      <button id="locale-toggle" class="locale-pill" aria-label="Switch language">
+        <span class="locale-label" data-locale="en">EN</span>
+        <span class="locale-divider">/</span>
+        <span class="locale-label" data-locale="vi">VI</span>
+      </button>
+      <button id="theme-toggle" class="theme-pill" aria-label="Switch theme">
+        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ============== 1. COVER ============== -->
+  <section id="cover" class="relative z-10 px-5 sm:px-10 pt-10 sm:pt-20 pb-16 sm:pb-28 max-w-5xl mx-auto">
+    <div class="grid grid-cols-12 gap-6 items-end">
+      <div class="col-span-12 sm:col-span-7">
+        <p class="font-serif italic text-lavender text-sm sm:text-base mb-3" data-i18n="cover.kicker">a small quiet place</p>
+        <h1 class="font-serif text-5xl sm:text-7xl leading-[0.95] text-ink mb-6">
+          <span data-i18n="cover.title.l1">You are</span><br/>
+          <span class="italic text-ink/85" data-i18n="cover.title.l2">already enough.</span>
+        </h1>
+        <p class="text-ink/75 text-lg sm:text-xl max-w-md leading-relaxed" data-i18n="cover.sub">
+          No score. No streak. No judgment. Sit down with me for a few minutes.
+        </p>
+      </div>
+
+      <div class="col-span-12 sm:col-span-5 sm:col-start-8">
+        <div class="polaroid p-6 bg-paper/90">
+          <label class="block text-sm text-ink/60 mb-2 font-serif italic" data-i18n="cover.nameLabel">What should I call you?</label>
+          <input id="name-input" type="text" maxlength="32"
+                 class="w-full bg-transparent border-b border-ink/20 focus:border-gold outline-none py-2 text-lg font-serif text-ink placeholder:text-ink/30"
+                 data-i18n-ph="cover.namePh" placeholder="a name, or leave blank" />
+          <div class="flex items-center gap-3 mt-6">
+            <button id="begin-btn" class="btn-primary" data-i18n="cover.begin">begin softly</button>
+            <button id="begin-skip" class="btn-ghost" data-i18n="cover.skip">skip</button>
+          </div>
+          <p class="mt-4 text-xs text-ink/45 leading-relaxed" data-i18n="cover.note">
+            This stays on your device. No account. No cloud. You can clear it any time.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-14 sm:mt-20 flex justify-center">
+      <svg class="wavy-divider" viewBox="0 0 200 12" fill="none" aria-hidden="true">
+        <path d="M0 6 Q 20 0 40 6 T 80 6 T 120 6 T 160 6 T 200 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" />
+      </svg>
+    </div>
+  </section>
+
+  <!-- ============== 3. GREETING + MOOD CHECK-IN ============== -->
+  <section id="greeting" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-5xl mx-auto">
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-12 sm:col-span-8 sm:col-start-2">
+        <p class="font-serif italic text-gold text-sm mb-3" data-i18n="greet.eyebrow">checking in</p>
+        <h2 id="greeting-text" class="font-serif text-3xl sm:text-5xl leading-snug text-ink mb-8">
+          <span data-i18n="greet.fresh">Welcome. I am glad you came in.</span>
+        </h2>
+        <p class="text-ink/70 text-lg leading-relaxed max-w-xl mb-10" data-i18n="greet.invite">
+          You don't have to share anything. But if you'd like, name the weather inside you. Just one word is enough.
+        </p>
+
+        <div id="mood-chips" class="flex flex-wrap gap-3 mb-6">
+          <!-- populated by JS -->
+        </div>
+
+        <div id="mood-note-wrap" class="hidden max-w-xl">
+          <label class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="mood.noteLabel">A small note (optional, 140 characters)</label>
+          <textarea id="mood-note" maxlength="140" rows="2"
+                    class="w-full bg-paper/80 border border-ink/10 focus:border-gold outline-none rounded-md p-3 font-serif text-ink placeholder:text-ink/30"
+                    data-i18n-ph="mood.notePh" placeholder="say it in a whisper..."></textarea>
+          <div class="flex items-center gap-3 mt-3">
+            <button id="mood-save" class="btn-primary" data-i18n="mood.save">save & rest</button>
+            <button id="mood-cancel" class="btn-ghost" data-i18n="mood.cancel">not now</button>
+          </div>
+        </div>
+
+        <p id="mood-ack" class="hidden font-serif italic text-teal text-lg mt-6"></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 4. STILL HAND OASIS ============== -->
+  <section id="oasis" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
+    <div class="grid grid-cols-12 gap-6 mb-10">
+      <div class="col-span-12 sm:col-span-7">
+        <p class="font-serif italic text-teal text-sm mb-3" data-i18n="oasis.eyebrow">a quiet corner</p>
+        <h2 class="font-serif text-3xl sm:text-5xl text-ink leading-tight">
+          <span data-i18n="oasis.title.l1">The Still Hand</span>
+          <span class="italic text-ink/80" data-i18n="oasis.title.l2">Oasis</span>
+        </h2>
+        <p class="text-ink/70 text-lg max-w-md mt-4 leading-relaxed" data-i18n="oasis.sub">
+          Care for something small. Watch the light change. Let your hands remember they can do gentle things.
+        </p>
+      </div>
+    </div>
+
+    <div id="oasis-room" class="oasis-room polaroid p-6 sm:p-10">
+      <div class="grid grid-cols-12 gap-6 items-end">
+        <!-- Tea -->
+        <div class="col-span-12 sm:col-span-4 flex flex-col items-center text-center">
+          <div id="tea-stage" class="tea-stage" data-state="idle">
+            <svg class="mug" viewBox="0 0 80 80" aria-hidden="true">
+              <defs>
+                <linearGradient id="mug-grad" x1="0" x2="0" y1="0" y2="1">
+                  <stop offset="0" stop-color="#FBF6E9"/>
+                  <stop offset="1" stop-color="#EFE3C5"/>
+                </linearGradient>
+              </defs>
+              <path d="M14 30 H58 V58 a8 8 0 0 1 -8 8 H22 a8 8 0 0 1 -8 -8 Z" fill="url(#mug-grad)" stroke="#2A2522" stroke-width="1.4"/>
+              <path d="M58 36 q10 0 10 10 q0 10 -10 10" fill="none" stroke="#2A2522" stroke-width="1.4"/>
+              <ellipse cx="36" cy="32" rx="22" ry="3" fill="#7FB7B0" opacity="0.55"/>
+            </svg>
+            <div class="steam">
+              <span></span><span></span><span></span>
+            </div>
+          </div>
+          <p class="font-serif italic mt-3 text-ink/70" data-i18n="oasis.tea.label">a quiet cup</p>
+          <button id="tea-btn" class="btn-ghost mt-2" data-i18n="oasis.tea.btn">brew tea</button>
+        </div>
+
+        <!-- Plant -->
+        <div class="col-span-12 sm:col-span-4 flex flex-col items-center text-center">
+          <div id="plant-stage" class="plant-stage">
+            <svg class="plant" viewBox="0 0 120 140" aria-hidden="true">
+              <rect x="40" y="100" width="40" height="34" rx="4" fill="#7B5E3F"/>
+              <rect x="40" y="100" width="40" height="6" fill="#5A4329"/>
+              <g class="plant-leaves" id="plant-leaves">
+                <!-- stem -->
+                <path d="M60 100 Q60 70 60 50" stroke="#5C7A4F" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+                <!-- left leaf -->
+                <path class="leaf leaf-l" d="M60 78 Q40 70 36 56 Q50 58 60 78 Z" fill="#8AA487"/>
+                <!-- right leaf -->
+                <path class="leaf leaf-r" d="M60 70 Q80 62 84 48 Q70 50 60 70 Z" fill="#8AA487"/>
+                <!-- top sprout -->
+                <path class="leaf leaf-t" d="M60 50 Q56 38 60 28 Q64 38 60 50 Z" fill="#A8C19A"/>
+              </g>
+              <!-- water droplets (shown after click) -->
+              <g class="droplets" id="plant-droplets" opacity="0">
+                <circle cx="44" cy="60" r="1.4" fill="#7FB7B0"/>
+                <circle cx="78" cy="56" r="1.2" fill="#7FB7B0"/>
+                <circle cx="60" cy="38" r="1.1" fill="#7FB7B0"/>
+              </g>
+            </svg>
+          </div>
+          <p class="font-serif italic mt-3 text-ink/70">
+            <span data-i18n="oasis.plant.label">desk plant</span>
+            <span class="text-ink/40"> · <span id="plant-growth-num">0</span>%</span>
+          </p>
+          <button id="plant-btn" class="btn-ghost mt-2" data-i18n="oasis.plant.btn">water it</button>
+        </div>
+
+        <!-- Lamp -->
+        <div class="col-span-12 sm:col-span-4 flex flex-col items-center text-center">
+          <div class="lamp-stage">
+            <svg class="lamp" viewBox="0 0 80 140" aria-hidden="true">
+              <path d="M20 50 L60 50 L52 14 L28 14 Z" fill="#E8B86D" stroke="#2A2522" stroke-width="1.4"/>
+              <rect x="22" y="50" width="36" height="6" fill="#C99A4F"/>
+              <line x1="40" y1="56" x2="40" y2="120" stroke="#2A2522" stroke-width="2"/>
+              <ellipse cx="40" cy="124" rx="22" ry="4" fill="#2A2522"/>
+              <ellipse class="lamp-glow" id="lamp-glow" cx="40" cy="50" rx="80" ry="80" fill="#E8B86D" opacity="0"/>
+            </svg>
+          </div>
+          <p class="font-serif italic mt-3 text-ink/70" data-i18n="oasis.lamp.label">desk lamp</p>
+          <div class="flex items-center gap-2 mt-2">
+            <button id="lamp-btn" class="btn-ghost" data-i18n="oasis.lamp.btn">toggle</button>
+            <input id="lamp-warmth" type="range" min="30" max="100" value="60" class="warmth-slider" aria-label="lamp warmth" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============== 5. WORD GARDEN ============== -->
+  <section id="garden" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
+    <div class="grid grid-cols-12 gap-6 mb-8">
+      <div class="col-span-12 sm:col-span-7 sm:col-start-1">
+        <p class="font-serif italic text-moss text-sm mb-3" data-i18n="garden.eyebrow">plant a worry</p>
+        <h2 class="font-serif text-3xl sm:text-5xl text-ink leading-tight">
+          <span data-i18n="garden.title.l1">Word</span>
+          <span class="italic text-ink/80" data-i18n="garden.title.l2">Garden</span>
+        </h2>
+        <p class="text-ink/70 text-lg max-w-md mt-4 leading-relaxed" data-i18n="garden.sub">
+          Type a worry. It becomes a slow branch. You don't have to look after it. It will rest here.
+        </p>
+      </div>
+      <div class="col-span-12 sm:col-span-5 sm:col-start-8">
+        <div class="polaroid p-5 bg-paper/90">
+          <label class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="garden.label">A worry (or a thought)</label>
+          <textarea id="garden-input" maxlength="140" rows="2"
+                    class="w-full bg-transparent border-b border-ink/15 focus:border-gold outline-none resize-none py-1 font-serif text-ink placeholder:text-ink/30"
+                    data-i18n-ph="garden.ph" placeholder="what's sitting on your chest..."></textarea>
+          <div class="flex items-center justify-between mt-3">
+            <span class="text-xs text-ink/40"><span id="garden-count">0</span>/140</span>
+            <button id="garden-submit" class="btn-primary" data-i18n="garden.plant">plant it</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="garden-frame" class="polaroid bg-paper/70 p-3 sm:p-5 overflow-hidden">
+      <canvas id="garden-canvas" class="w-full block" style="height: 360px;"></canvas>
+    </div>
+    <p class="text-xs text-ink/45 mt-2 font-serif italic" data-i18n="garden.footer">Branches grow slowly. Sit with one. There is no rush.</p>
+  </section>
+
+  <!-- ============== 6. CONSTELLATION SKY ============== -->
+  <section id="sky" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
+    <div class="grid grid-cols-12 gap-6 mb-8">
+      <div class="col-span-12 sm:col-span-7">
+        <p class="font-serif italic text-lavender text-sm mb-3" data-i18n="sky.eyebrow">place a star</p>
+        <h2 class="font-serif text-3xl sm:text-5xl text-ink leading-tight">
+          <span data-i18n="sky.title.l1">Constellation</span>
+          <span class="italic text-ink/80" data-i18n="sky.title.l2">Sky</span>
+        </h2>
+        <p class="text-ink/70 text-lg max-w-md mt-4 leading-relaxed" data-i18n="sky.sub">
+          Tap the dark. Place a star. They will reach toward each other. The sky is allowed to sing — only when you ask it to.
+        </p>
+        <div class="mt-5 flex flex-wrap items-center gap-3">
+          <button id="moon-btn" class="moon-btn" aria-label="toggle sky sound">
+            <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+            <span data-i18n="sky.letSing">let the sky sing</span>
+          </button>
+          <button id="sky-clear" class="btn-ghost" data-i18n="sky.clear">clear my stars</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="sky-frame" class="sky-frame polaroid overflow-hidden">
+      <canvas id="sky-canvas" class="w-full block" style="height: 460px; cursor: crosshair;"></canvas>
+      <div id="sky-whisper" class="sky-whisper"></div>
+    </div>
+  </section>
+
+  <!-- ============== 8. HELPLINES ============== -->
+  <section id="help" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
+    <div class="grid grid-cols-12 gap-6 mb-10">
+      <div class="col-span-12 sm:col-span-8">
+        <p class="font-serif italic text-rose text-sm mb-3" data-i18n="help.eyebrow">if you need a real voice</p>
+        <h2 class="font-serif text-3xl sm:text-5xl text-ink leading-tight">
+          <span data-i18n="help.title.l1">Someone</span>
+          <span class="italic text-ink/80" data-i18n="help.title.l2">is there</span>
+        </h2>
+        <p class="text-ink/70 text-lg max-w-xl mt-4 leading-relaxed" data-i18n="help.sub">
+          These are real people who pick up. We do not put phone numbers into links — you dial them yourself, when you decide. That is your hand to hold first.
+        </p>
+      </div>
+    </div>
+
+    <!-- Vietnam panel -->
+    <div class="mb-12">
+      <h3 class="font-serif text-2xl text-ink mb-5 flex items-center gap-3">
+        <span class="wavy-bullet"></span>
+        <span data-i18n="help.vn">Vietnam</span>
+      </h3>
+      <div id="helplines-vn" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+
+    <!-- Global panel -->
+    <div class="mb-12">
+      <h3 class="font-serif text-2xl text-ink mb-5 flex items-center gap-3">
+        <span class="wavy-bullet"></span>
+        <span data-i18n="help.global">Find a helpline, anywhere</span>
+      </h3>
+      <div class="polaroid p-5 sm:p-6 bg-paper/90">
+        <div class="flex flex-col sm:flex-row gap-3 sm:items-center mb-5">
+          <input id="helpline-search" type="text"
+                 class="flex-1 bg-transparent border-b border-ink/15 focus:border-gold outline-none py-2 font-serif text-ink placeholder:text-ink/30"
+                 data-i18n-ph="help.searchPh" placeholder="a country or a word..." />
+          <p class="text-xs text-ink/45 font-serif italic" data-i18n="help.searchHint">type to filter</p>
+        </div>
+        <div id="helplines-global" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[420px] overflow-y-auto pr-2"></div>
+        <p class="text-xs text-ink/45 mt-3 font-serif italic" data-i18n="help.globalSrc">Sourced from open directories. Numbers are shown for you to dial.</p>
+      </div>
+    </div>
+
+    <!-- Community panel -->
+    <div>
+      <h3 class="font-serif text-2xl text-ink mb-5 flex items-center gap-3">
+        <span class="wavy-bullet"></span>
+        <span data-i18n="help.community">Community & peer projects</span>
+      </h3>
+      <div id="helplines-community" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+    </div>
+  </section>
+
+  <!-- ============== 7. SOFT BUBBLE POP (ambient, persistent corner) ============== -->
+  <div id="bubble-field" class="bubble-field" aria-hidden="true"></div>
+  <div id="bubble-whisper" class="bubble-whisper" aria-live="polite"></div>
+
+  <!-- ============== 9. FOOTER ============== -->
+  <footer class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-5xl mx-auto">
+    <div class="grid grid-cols-12 gap-6">
+      <div class="col-span-12 sm:col-span-6">
+        <p class="font-serif italic text-ink/60 text-sm mb-3" data-i18n="foot.kicker">this space is yours</p>
+        <h3 class="font-serif text-3xl sm:text-4xl text-ink leading-tight">
+          <span data-i18n="foot.line1">You can come back any time.</span><br/>
+          <span class="italic text-ink/70" data-i18n="foot.line2">Nothing here is recorded anywhere but here.</span>
+        </h3>
+      </div>
+      <div class="col-span-12 sm:col-span-6 flex flex-col gap-3 sm:items-end">
+        <button id="reread-note" class="btn-ghost text-left" data-i18n="foot.reread">re-read the note from a friend</button>
+        <button id="export-profile" class="btn-ghost text-left" data-i18n="foot.export">save a copy of this space</button>
+        <button id="import-profile" class="btn-ghost text-left" data-i18n="foot.import">bring a copy back in</button>
+        <input type="file" id="import-file" accept="application/json" class="hidden" />
+        <button id="reset-profile" class="btn-ghost text-left text-rose/80" data-i18n="foot.reset">let it go (reset everything)</button>
+      </div>
+    </div>
+    <div class="mt-12 pt-6 border-t border-ink/10 text-xs text-ink/45 font-serif italic">
+      <span data-i18n="foot.credit">Made with care. No cookies. No trackers. No backend. Made for slow, ordinary hard days.</span>
+    </div>
+  </footer>
+
+  <!-- ============== NOTE FROM A FRIEND MODAL ============== -->
+  <div id="note-modal" class="note-modal hidden" role="dialog" aria-modal="true" aria-labelledby="note-title" aria-describedby="note-content">
+    <div class="note-backdrop" tabindex="-1"></div>
+    <div class="note-card polaroid" tabindex="-1">
+      <p class="font-serif italic text-gold text-sm mb-2" data-i18n="note.kicker">a note from a friend</p>
+      <h2 id="note-title" class="font-serif text-3xl text-ink mb-4" data-i18n="note.title">Hello, dear one.</h2>
+      <div id="note-content" class="font-serif text-ink/80 text-lg leading-relaxed space-y-3">
+        <p data-i18n="note.p1">This little space was not built to fix you. You are not a thing that needs fixing.</p>
+        <p data-i18n="note.p2">It is built to keep you company for a few minutes. A cup of tea, a slow branch, a star you can place on a dark night.</p>
+        <p data-i18n="note.p3">If you are in real danger, or you might hurt yourself, please talk to a real human. There are numbers a few scrolls below. They pick up. They have heard it all before. You will not be a burden.</p>
+        <p data-i18n="note.p4">I am only a small page. But I am glad you are here.</p>
+      </div>
+      <button id="note-close" class="btn-primary mt-6" data-i18n="note.close">thank you, sit me down</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
