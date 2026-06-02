@@ -47,6 +47,23 @@ body.theme-night .blob { opacity: 0.5; }
 
 /* ============== TYPOGRAPHY TWEAKS ============== */
 .font-serif { font-feature-settings: "liga", "kern", "onum"; }
+
+/* ============== BREATHING + GROUNDING UI ============== */
+.breath-ring { width: 76px; height: 76px; border-radius: 9999px; border: 1px solid rgba(42,37,34,0.10); position: relative; display:flex; align-items:center; justify-content:center; }
+.breath-ring-inner { width: 60px; height: 60px; border-radius: 9999px; background: rgba(251,246,233,0.72); }
+.breath-ring-progress { position:absolute; inset: -1px; border-radius: 9999px; background: conic-gradient(from 90deg, rgba(232,184,109,0.95) var(--p, 0%), rgba(42,37,34,0.08) 0); mask: radial-gradient(circle, transparent 53%, #000 54%); }
+body.theme-night .breath-ring-inner { background: rgba(37,35,64,0.65); }
+body.theme-night .breath-ring { border-color: rgba(232,231,210,0.10); }
+body.theme-night .breath-ring-progress { background: conic-gradient(from 90deg, rgba(232,184,109,0.95) var(--p, 0%), rgba(232,231,210,0.10) 0); }
+
+.ground-step-btn.active { background: var(--teal); color: var(--paper); border-color: var(--teal); }
+body.theme-night .ground-step-btn.active { background: var(--teal); color: var(--night); border-color: var(--teal); }
+
+/* Reduced motion: turn off any pulsing implied by breathing ring */
+@media (prefers-reduced-motion: reduce) {
+  .breath-ring-progress { transition: none !important; }
+}
+
 h1, h2, h3 { font-weight: 500; letter-spacing: -0.01em; }
 
 

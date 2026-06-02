@@ -440,6 +440,10 @@
   const MOOD_KEYS = ['heavy', 'scattered', 'soft', 'tender', 'quiet'];
   const NEGATIVE_MOODS = new Set(['heavy', 'scattered']); // triggers "checking" branch
 
+  // When moods feel heavy/scattered, gently offer a real-safety interstitial.
+  const SAFETY_MOODS = new Set(['heavy', 'scattered']);
+
+
   /* =========================================================
      2. STATE + PERSISTENCE
      ========================================================= */
@@ -452,6 +456,23 @@
       user: { name: null, locale: detectInitialLocale(), firstVisit: new Date().toISOString(), firstVisitSeen: false, visitCount: 0 },
       moods: [],
       prefs: { sound: 'off', motion: 'full', theme: 'wheat' },
+
+      // Breathing + Grounding gameplay state
+      breath: {
+        presetKey: '446',     // '446' | '448' | '335'
+        running: false,
+        cycles: 0,
+        phase: 'in',          // 'in' | 'hold' | 'out' | 'rest'
+        phaseIndex: 0,
+        phaseStartedAt: null,
+        phaseDurationMs: 0,
+        totalPausedAt: null
+      },
+      ground: {
+        step: 0,              // 0..4 (5..1)
+        done: false
+      },
+
       oasis: { teaBrewedAt: null, plantGrowth: 0, lampOn: true, lampWarmth: 0.6 },
       garden: [],
       sky: [],
@@ -562,8 +583,99 @@
   }
 
   /* =========================================================
-     4. NOTE MODAL
+     4. NOTE MODAL + SAFETY INTERSTITIAL
      ========================================================= */
+
+  function getCountryHint() {
+    // Offline heuristic only.
+    const lang = (navigator.language || '').toLowerCase();
+    if (lang.startsWith('vi')) return 'vietnam';
+    return 'global';
+  }
+
+  function openSafetyModal() {
+    const modal = document.getElementById('safety-modal');
+    if (!modal) return;
+
+    const closeBtn = document.getElementById('safety-close');
+    const contBtn = document.getElementById('safety-continue');
+    const backdrop = modal.querySelector('.note-backdrop');
+    const card = modal.querySelector('.note-card');
+
+    const previouslyFocused = { el: null };
+    const focusableSelector = 'button,[href],input,textarea,select,[tabindex]:not([tabindex="-1"])';
+
+    function getFocusable() {
+      return Array.from(card.querySelectorAll(focusableSelector))
+        .filter(el => !el.disabled && el.offsetParent !== null);
+    }
+
+    function populateList() {
+      const list = document.getElementById('safety-list');
+      if (!list) return;
+      list.innerHTML = '';
+
+      const hint = getCountryHint();
+      const candidates = hint === 'vietnam' ? HELPLINES.vietnam : HELPLINES.global.slice(0, 10);
+      // Keep it short: 4 options.
+      candidates.slice(0, 4).forEach(h => {
+        const li = document.createElement('li');
+        const name = h.name;
+        const tel = h.tel;
+        const hours = h.hours ? ` · ${h.hours}` : '';
+        li.textContent = `${name}: ${tel}${hours}`;
+        list.appendChild(li);
+      });
+    }
+
+    function close() {
+      modal.classList.add('hidden');
+      document.removeEventListener('keydown', onKeyDown, true);
+      if (previouslyFocused.el && typeof previouslyFocused.el.focus === 'function') previouslyFocused.el.focus();
+    }
+
+    function open() {
+      previouslyFocused.el = document.activeElement;
+      populateList();
+      modal.classList.remove('hidden');
+      setTimeout(() => {
+        const focusables = getFocusable();
+        (focusables[0] || closeBtn || contBtn || card)?.focus?.();
+      }, 0);
+      document.addEventListener('keydown', onKeyDown, true);
+    }
+
+    function onKeyDown(e) {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focusables = getFocusable();
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+
+      if (e.shiftKey) {
+        if (active === first || !card.contains(active)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (active === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    contBtn?.addEventListener('click', () => close());
+    closeBtn?.addEventListener('click', () => close());
+    backdrop?.addEventListener('click', () => close());
+    open();
+  }
 
   function maybeShowNote() {
     const modal = document.getElementById('note-modal');
@@ -698,12 +810,24 @@
     const cancel = document.getElementById('mood-cancel');
     if (!save) return;
 
+    function maybeOpenSafetyForMood(label) {
+      if (!SAFETY_MOODS.has(label)) return;
+      const safetyModal = document.getElementById('safety-modal');
+      if (!safetyModal) return;
+      openSafetyModal();
+    }
+
+
     save.addEventListener('click', () => {
       const sel = document.querySelector('.mood-chip.selected');
       if (!sel) return;
       const label = sel.dataset.mood;
       const note = (document.getElementById('mood-note').value || '').trim().slice(0, 140);
       const intensity = label === 'heavy' || label === 'scattered' ? 4 : (label === 'tender' ? 2 : 2);
+
+      // Soft safety interstitial on heavy/scattered.
+      maybeOpenSafetyForMood(label);
+
       State.moods.push({
         id: 'm_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
         ts: Date.now(),
@@ -779,6 +903,7 @@
   }
 
   function bindLamp() {
+
     const room = document.getElementById('oasis-room');
     const btn = document.getElementById('lamp-btn');
     const slider = document.getElementById('lamp-warmth');
@@ -803,6 +928,309 @@
       persist();
     });
   }
+
+  /* =========================================================
+     7. BREATHING + GROUNDING
+     ========================================================= */
+
+  const Breath = (() => {
+    let els = null;
+    let rafId = null;
+    let phaseTimer = null;
+
+    const PRESETS = [
+      { key: '446', phases: [ { label: 'in', ms: 4000 }, { label: 'hold', ms: 0 }, { label: 'out', ms: 6000 }, { label: 'rest', ms: 1000 } ] },
+      { key: '448', phases: [ { label: 'in', ms: 4000 }, { label: 'hold', ms: 0 }, { label: 'out', ms: 8000 }, { label: 'rest', ms: 1000 } ] },
+      { key: '335', phases: [ { label: 'in', ms: 3000 }, { label: 'hold', ms: 0 }, { label: 'out', ms: 5000 }, { label: 'rest', ms: 1200 } ] }
+    ];
+
+    function msForPreset(presetKey) {
+      const p = PRESETS.find(x => x.key === presetKey) || PRESETS[0];
+      return p.phases.reduce((acc, ph) => acc + (ph.ms || 0), 0);
+    }
+
+    function setPhase(phaseIndex, startedAt) {
+      if (!els) return;
+      const preset = PRESETS.find(x => x.key === State.breath.presetKey) || PRESETS[0];
+      const phases = preset.phases;
+
+      const phase = phases[phaseIndex] || phases[0];
+      const label = phase.label;
+
+      State.breath.phaseIndex = phaseIndex;
+      State.breath.phase = label;
+      State.breath.phaseStartedAt = startedAt || Date.now();
+      State.breath.phaseDurationMs = phase.ms || 0;
+      persist();
+
+      els.cycleCounter.textContent = `${State.breath.cycles}`;
+      els.phaseText.textContent = t('breath.' + (label === 'in' ? 'in' : label === 'out' ? 'out' : label === 'hold' ? 'hold' : 'rest'));
+      els.phaseSub.textContent = t('breath.cycles');
+      els.ringProgress.style.setProperty('--p', `${Math.round(0)}%`);
+
+      if (rafId) cancelAnimationFrame(rafId);
+      if (phaseTimer) clearInterval(phaseTimer);
+
+      if ((phase.ms || 0) <= 0) {
+        tickNext();
+      } else {
+        rafId = requestAnimationFrame(renderProgressLoop);
+        phaseTimer = setInterval(renderProgressLoop, 200);
+      }
+    }
+
+    function renderProgressLoop() {
+      if (!els) return;
+      const startedAt = State.breath.phaseStartedAt;
+      const dur = State.breath.phaseDurationMs;
+      if (!startedAt || !dur) return;
+
+      const elapsed = Date.now() - startedAt;
+      const p = Math.max(0, Math.min(1, elapsed / dur));
+      els.ringProgress.style.setProperty('--p', `${Math.round(p * 100)}%`);
+
+      if (p >= 1) {
+        if (rafId) cancelAnimationFrame(rafId);
+        if (phaseTimer) clearInterval(phaseTimer);
+        tickNext();
+      }
+    }
+
+    function tickNext() {
+      const preset = PRESETS.find(x => x.key === State.breath.presetKey) || PRESETS[0];
+      const phases = preset.phases;
+      const next = (State.breath.phaseIndex + 1) % phases.length;
+
+      // Count cycles when we return to first phase (in)
+      if (next === 0) State.breath.cycles += 1;
+
+      if (!State.breath.running) {
+        // When paused/stopped, keep state but no auto advance.
+        persist();
+        return;
+      }
+      setPhase(next, Date.now());
+    }
+
+    function refresh() {
+      els = els || {
+        toggle: document.getElementById('breath-toggle'),
+        reset: document.getElementById('breath-reset'),
+        presetButtons: Array.from(document.querySelectorAll('.breath-preset[data-preset]')),
+        status: document.getElementById('breath-status'),
+        cycles: document.getElementById('breath-cycles'),
+        phaseText: document.getElementById('breath-phase'),
+        phaseSub: document.getElementById('breath-cycle'),
+        ringProgress: document.querySelector('.breath-ring-progress'),
+        ringInner: document.querySelector('.breath-ring-inner')
+      };
+
+      if (!els.toggle || !els.reset || !els.phaseText || !els.ringProgress) return;
+
+      // preset highlight
+      els.presetButtons.forEach(btn => {
+        const k = btn.getAttribute('data-preset');
+        btn.classList.toggle('selected', k === State.breath.presetKey);
+      });
+
+      els.toggle.textContent = State.breath.running ? t('breath.stop') : t('breath.start');
+      els.phaseText.textContent = t('breath.' + (State.breath.phase === 'in' ? 'in' : State.breath.phase === 'out' ? 'out' : State.breath.phase === 'hold' ? 'hold' : 'rest'));
+      els.cycles && (els.cycles.textContent = State.breath.cycles + '');
+      if (els.phaseSub) els.phaseSub.textContent = t('breath.cycles');
+      els.ringProgress.style.setProperty('--p', '0%');
+
+      // sync phase duration from preset
+      const preset = PRESETS.find(x => x.key === State.breath.presetKey) || PRESETS[0];
+      const phases = preset.phases;
+      const ph = phases[State.breath.phaseIndex] || phases[0];
+      State.breath.phaseDurationMs = ph.ms || 0;
+      if (State.breath.phaseStartedAt == null) State.breath.phaseStartedAt = Date.now();
+      persist();
+    }
+
+    function start() {
+      State.breath.running = true;
+      persist();
+      const preset = PRESETS.find(x => x.key === State.breath.presetKey) || PRESETS[0];
+      const phases = preset.phases;
+
+      const startIndex = Math.max(0, Math.min(phases.length - 1, State.breath.phaseIndex || 0));
+      setPhase(startIndex === 0 ? 0 : startIndex, Date.now());
+
+      if (els) refresh();
+    }
+
+    function stop() {
+      State.breath.running = false;
+      persist();
+      if (rafId) cancelAnimationFrame(rafId);
+      if (phaseTimer) clearInterval(phaseTimer);
+      rafId = null; phaseTimer = null;
+      if (els) refresh();
+    }
+
+    function reset() {
+      stop();
+      State.breath.cycles = 0;
+      State.breath.phase = 'in';
+      State.breath.phaseIndex = 0;
+      State.breath.phaseStartedAt = Date.now();
+      const preset = PRESETS.find(x => x.key === State.breath.presetKey) || PRESETS[0];
+      State.breath.phaseDurationMs = preset.phases[0].ms || 0;
+      persist();
+      refresh();
+    }
+
+    function bind() {
+      const toggle = document.getElementById('breath-toggle');
+      const resetBtn = document.getElementById('breath-reset');
+      if (!toggle || !resetBtn) return;
+
+      // preset selection
+      document.querySelectorAll('.breath-preset[data-preset]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const k = btn.getAttribute('data-preset');
+          State.breath.presetKey = k;
+          State.breath.phaseIndex = 0;
+          State.breath.phase = 'in';
+          State.breath.phaseStartedAt = Date.now();
+          State.breath.cycles = State.breath.running ? State.breath.cycles : State.breath.cycles;
+          persist();
+          refresh();
+        });
+      });
+
+      toggle.addEventListener('click', () => {
+        if (State.breath.running) stop();
+        else start();
+      });
+
+      resetBtn.addEventListener('click', () => reset());
+    }
+
+    function init() {
+      bind();
+      refresh();
+    }
+
+    return { init, refresh };
+  })();
+
+  const Grounding = (() => {
+    let els = null;
+
+    const STEPS = [
+      { key: '5', i18n: 'ground.5' },
+      { key: '4', i18n: 'ground.4' },
+      { key: '3', i18n: 'ground.3' },
+      { key: '2', i18n: 'ground.2' },
+      { key: '1', i18n: 'ground.1' }
+    ];
+
+    function currentStep() {
+      const idx = Math.max(0, Math.min(4, State.ground.step || 0));
+      return STEPS[idx];
+    }
+
+    function refresh() {
+      els = els || {
+        stepButtons: Array.from(document.querySelectorAll('.ground-step-btn[data-step]')),
+        label: document.getElementById('ground-step-label'),
+        instructions: document.getElementById('ground-instructions'),
+        senseEls: Array.from(document.querySelectorAll('.ground-sense')),
+        next: document.getElementById('ground-next'),
+        reset: document.getElementById('ground-reset'),
+        doneWrap: document.getElementById('ground-done'),
+        doneTitle: document.getElementById('ground-done-title'),
+        counter: document.getElementById('ground-counter')
+      };
+
+      if (!els.label || !els.instructions || !els.next || !els.reset) return;
+
+      els.stepButtons.forEach(b => {
+        const n = parseInt(b.getAttribute('data-step'), 10);
+        const stepNum = 5 - n; // not used; keep stable
+        const idx = parseInt(b.getAttribute('data-step'), 10); // 5..1
+        const my = parseInt(String(currentStep().key), 10);
+        b.classList.toggle('active', idx === my);
+      });
+
+      const step = currentStep();
+      const idx = State.ground.step;
+
+      if (State.ground.done) {
+        if (els.doneWrap) els.doneWrap.classList.remove('hidden');
+        if (els.next) els.next.classList.add('hidden');
+        if (els.instructions) els.instructions.classList.add('hidden');
+        els.label.textContent = t('ground.done');
+      } else {
+        if (els.doneWrap) els.doneWrap.classList.add('hidden');
+        if (els.next) els.next.classList.remove('hidden');
+        if (els.instructions) els.instructions.classList.remove('hidden');
+        els.label.textContent = t(step.i18n);
+        // Placeholder extra instructions: use ground.ph as generic prompt.
+        els.instructions.querySelector('.ground-ph')?.textContent = t('ground.ph');
+        // If there is a specific sense line, update it minimally.
+        els.senseEls.forEach(el => {
+          // no strong mapping available; keep generic
+          el.textContent = t('ground.ph');
+        });
+      }
+      persist();
+    }
+
+    function setStep(stepIndex) {
+      State.ground.step = Math.max(0, Math.min(4, stepIndex));
+      State.ground.done = false;
+      persist();
+      refresh();
+    }
+
+    function next() {
+      if (State.ground.done) return;
+      if (State.ground.step >= 4) {
+        State.ground.done = true;
+      } else {
+        State.ground.step += 1;
+      }
+      persist();
+      refresh();
+    }
+
+    function reset() {
+      State.ground.step = 0;
+      State.ground.done = false;
+      persist();
+      refresh();
+    }
+
+    function bind() {
+      const nextBtn = document.getElementById('ground-next');
+      const resetBtn = document.getElementById('ground-reset');
+      if (!nextBtn || !resetBtn) return;
+
+      document.querySelectorAll('.ground-step-btn[data-step]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const num = parseInt(btn.getAttribute('data-step'), 10); // 5..1
+          const idx = 5 - num; // if num=5 idx=0; num=1 idx=4
+          State.ground.step = idx;
+          State.ground.done = false;
+          persist();
+          refresh();
+        });
+      });
+
+      nextBtn.addEventListener('click', () => next());
+      resetBtn.addEventListener('click', () => reset());
+    }
+
+    function init() {
+      bind();
+      refresh();
+    }
+
+    return { init, refresh };
+  })();
 
   /* =========================================================
      7. WORD GARDEN (Canvas)
@@ -1208,6 +1636,8 @@
 
   // expose for applyLocale
   window._sky = Sky;
+  window._breath = Breath;
+  window._ground = Grounding;
 
   /* =========================================================
      9. BUBBLE FIELD
@@ -1511,6 +1941,8 @@
     bindHelplineSearch();
     renderHelplines();
     applyLocale();          // also calls renderGreeting + renderMoodChips
+    Breath.init();
+    Grounding.init();
     Garden.init();
     Sky.init();
     Bubbles.init();
