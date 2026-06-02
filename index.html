@@ -145,12 +145,12 @@
   <section id="breathing" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
     <div class="grid grid-cols-12 gap-6 mb-8">
       <div class="col-span-12 sm:col-span-8 sm:col-start-1">
-        <p class="font-serif italic text-lavender text-sm mb-3">a small breath practice</p>
+        <p class="font-serif italic text-lavender text-sm mb-3" data-i18n="breath.eyebrow">a small breath practice</p>
         <h2 class="font-serif text-3xl sm:text-5xl text-ink leading-tight">
-          <span class="font-serif">Breathe</span>
-          <span class="italic text-ink/80">with me</span>
+          <span data-i18n="breath.title.l1">Breathe</span>
+          <span class="italic text-ink/80" data-i18n="breath.title.l2">with me</span>
         </h2>
-        <p class="text-ink/70 text-lg max-w-xl mt-4 leading-relaxed">
+        <p class="text-ink/70 text-lg max-w-xl mt-4 leading-relaxed" data-i18n="breath.sub">
           Choose a rhythm. Press start. No special technique—just a gentle tempo for your chest.
         </p>
       </div>
@@ -159,7 +159,7 @@
         <div class="polaroid p-5 bg-paper/90 w-full">
           <div class="flex flex-col gap-3">
             <div class="flex items-center justify-between">
-              <p class="font-serif italic text-ink/60 text-sm">preset</p>
+              <p class="font-serif italic text-ink/60 text-sm" data-i18n="breath.presetLabel">preset</p>
               <span id="breath-preset-label" class="font-serif italic text-ink/80 text-sm">4–4–6</span>
             </div>
 
@@ -170,11 +170,11 @@
             </div>
 
             <div class="flex items-center gap-3 mt-2">
-              <button id="breath-toggle" class="btn-primary" type="button">start gently</button>
-              <button id="breath-reset" class="btn-ghost" type="button">reset</button>
+              <button id="breath-toggle" class="btn-primary" type="button" data-i18n="breath.start">start gently</button>
+              <button id="breath-reset" class="btn-ghost" type="button" data-i18n="breath.resetLabel">reset</button>
             </div>
 
-            <p class="text-xs text-ink/45 font-serif italic" id="breath-status">
+            <p class="text-xs text-ink/45 font-serif italic" id="breath-status" data-i18n="breath.notRunning">
               Not running.
             </p>
           </div>
@@ -185,17 +185,17 @@
     <div class="polaroid bg-paper/70 p-5 sm:p-7 overflow-hidden">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <p class="text-sm text-ink/50 font-serif italic">cycle</p>
+          <p class="text-sm text-ink/50 font-serif italic" data-i18n="breath.cycleLabel">cycle</p>
           <div class="font-serif text-4xl sm:text-5xl text-ink/90">
-            <span id="breath-cycle">0</span><span class="text-ink/40 text-lg"> </span>
+            <span id="breath-cycles">0</span><span class="text-ink/40 text-lg"> </span><span id="breath-cycle-sub" class="text-ink/40 text-lg"></span>
           </div>
         </div>
 
         <div class="flex items-center gap-4">
           <div class="text-center">
-            <p class="text-sm text-ink/50 font-serif italic">phase</p>
+            <p class="text-sm text-ink/50 font-serif italic" data-i18n="breath.phaseLabel">phase</p>
             <div class="font-serif text-3xl text-ink/90">
-              <span id="breath-phase">breathe in</span>
+              <span id="breath-phase" data-i18n="breath.in">breathe in</span>
             </div>
           </div>
 
@@ -208,7 +208,7 @@
         </div>
       </div>
 
-      <p class="mt-4 text-xs text-ink/45 font-serif italic">
+      <p class="mt-4 text-xs text-ink/45 font-serif italic" data-i18n="breath.disclaimer">
         If you feel dizzy or uncomfortable, stop. Your nervous system deserves gentleness.
       </p>
     </div>
@@ -218,12 +218,12 @@
   <section id="grounding" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
     <div class="grid grid-cols-12 gap-6 mb-8">
       <div class="col-span-12 sm:col-span-7">
-        <p class="font-serif italic text-teal text-sm mb-3">come back to the room</p>
+        <p class="font-serif italic text-teal text-sm mb-3" data-i18n="ground.eyebrow">come back to the room</p>
         <h2 class="font-serif text-3xl sm:text-5xl text-ink leading-tight">
-          <span>Five, four, three,</span><br/>
-          <span class="italic text-ink/80">two, one</span>
+          <span data-i18n="ground.title.l1">Five, four, three,</span><br/>
+          <span class="italic text-ink/80" data-i18n="ground.title.l2">two, one</span>
         </h2>
-        <p class="text-ink/70 text-lg max-w-md mt-4 leading-relaxed">
+        <p class="text-ink/70 text-lg max-w-md mt-4 leading-relaxed" data-i18n="ground.sub">
           Tap each sense when you have found one. You can go slowly.
         </p>
       </div>
@@ -231,7 +231,7 @@
       <div class="col-span-12 sm:col-span-5 sm:col-start-8">
         <div class="polaroid p-5 bg-paper/90">
           <div class="flex items-center justify-between">
-            <p class="text-sm text-ink/50 font-serif italic">step</p>
+            <p class="text-sm text-ink/50 font-serif italic" data-i18n="ground.stepLabel">step</p>
             <span id="ground-step-label" class="font-serif italic text-ink/80">1 / 5</span>
           </div>
 
@@ -245,15 +245,15 @@
 
           <div class="mt-4">
             <p class="text-xs text-ink/45 font-serif italic" id="ground-instructions">
-              Find <span class="ground-sense">5</span> things you can see.
+              <span id="ground-instruction-text" data-i18n="ground.5">Find 5 things you can see.</span>
             </p>
 
             <div class="flex items-center gap-3 mt-3">
-              <button id="ground-next" class="btn-primary" type="button">next gently</button>
-              <button id="ground-reset" class="btn-ghost" type="button">start over</button>
+              <button id="ground-next" class="btn-primary" type="button" data-i18n="ground.next">next gently</button>
+              <button id="ground-reset" class="btn-ghost" type="button" data-i18n="ground.resetLabel">start over</button>
             </div>
 
-            <p id="ground-done" class="hidden text-lg font-serif italic text-teal mt-4">
+            <p id="ground-done" class="hidden text-lg font-serif italic text-teal mt-4" data-i18n="ground.done">
               You are here. That is the whole point.
             </p>
           </div>
@@ -414,6 +414,80 @@
     </div>
   </section>
 
+  <!-- ============== 8. MINI-GAMES ============== -->
+  <section id="minigames" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
+    <div class="grid grid-cols-12 gap-6 mb-10 items-end">
+      <div class="col-span-12 sm:col-span-7">
+        <p class="font-serif italic text-lavender text-sm mb-3" data-i18n="mini.eyebrow">small play, soft focus</p>
+        <h2 class="font-serif text-3xl sm:text-5xl text-ink leading-tight">
+          <span data-i18n="mini.title.l1">No-score</span>
+          <span class="italic text-ink/80" data-i18n="mini.title.l2">mini-games</span>
+        </h2>
+        <p class="text-ink/70 text-lg max-w-2xl mt-4 leading-relaxed" data-i18n="mini.sub">
+          Touch slowly. Breathe while it happens. Nothing here is measured — only your attention.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-6">
+      <!-- Mini 1: Calm Tap -->
+      <div class="col-span-12 lg:col-span-6">
+        <div class="polaroid p-6 sm:p-7 overflow-hidden">
+          <div class="flex items-start justify-between gap-4 mb-5">
+            <div>
+              <p class="font-serif italic text-teal text-sm mb-2" data-i18n="tap.eyebrow">a gentle rhythm</p>
+              <h3 class="font-serif text-2xl text-ink mb-1" data-i18n="tap.title">Quiet Tap</h3>
+              <p class="text-ink/65 text-sm leading-relaxed" data-i18n="tap.sub">Tap the “flower” when it opens. No streak. Just timing.</p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs text-ink/45 font-serif italic" data-i18n="tap.statusLabel">status</p>
+              <p id="tap-status" class="font-serif text-ink/80 text-sm" aria-live="polite" data-i18n="tap.status.idle">waiting...</p>
+            </div>
+          </div>
+
+          <div class="tap-wrap">
+            <canvas id="tap-canvas" class="tap-canvas w-full block" style="height: 260px;"></canvas>
+            <div class="flex items-center justify-between gap-4 mt-4">
+              <button id="tap-toggle" class="btn-primary" type="button" data-i18n="tap.start">start gently</button>
+              <button id="tap-reset" class="btn-ghost" type="button" data-i18n="tap.reset">reset</button>
+            </div>
+            <div class="mt-3 text-xs text-ink/45 font-serif italic">
+              <span data-i18n="tap.hint">Tip:</span> <span data-i18n="tap.hint2">slow taps are the right taps.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mini 2: Paper Wind (Canvas) -->
+      <div class="col-span-12 lg:col-span-6">
+        <div class="polaroid p-6 sm:p-7 overflow-hidden">
+          <div class="flex items-start justify-between gap-4 mb-5">
+            <div>
+              <p class="font-serif italic text-moss text-sm mb-2" data-i18n="wind.eyebrow">a moving quiet</p>
+              <h3 class="font-serif text-2xl text-ink mb-1" data-i18n="wind.title">Paper Wind</h3>
+              <p class="text-ink/65 text-sm leading-relaxed" data-i18n="wind.sub">Move your pointer and watch soft paper pieces drift.</p>
+            </div>
+            <div class="text-right">
+              <p class="text-xs text-ink/45 font-serif italic" data-i18n="wind.statusLabel">status</p>
+              <p id="wind-status" class="font-serif text-ink/80 text-sm" aria-live="polite" data-i18n="wind.status.on">ready</p>
+            </div>
+          </div>
+
+          <div class="wind-wrap">
+            <canvas id="wind-canvas" class="wind-canvas w-full block" style="height: 260px; cursor: crosshair;"></canvas>
+            <div class="flex items-center justify-between gap-4 mt-4">
+              <button id="wind-pause" class="btn-ghost" type="button" data-i18n="wind.pause">pause motion</button>
+              <button id="wind-clear" class="btn-ghost" type="button" data-i18n="wind.clear">clear pieces</button>
+            </div>
+            <div class="mt-3 text-xs text-ink/45 font-serif italic">
+              <span data-i18n="wind.hint">Hint:</span> <span data-i18n="wind.hint2">hover gently; let the drift do the work.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ============== 8. HELPLINES ============== -->
   <section id="help" class="relative z-10 px-5 sm:px-10 py-16 sm:py-24 max-w-6xl mx-auto">
     <div class="grid grid-cols-12 gap-6 mb-10">
@@ -474,29 +548,29 @@
   <div id="safety-modal" class="note-modal hidden" role="dialog" aria-modal="true" aria-labelledby="safety-title" aria-describedby="safety-body">
     <div class="note-backdrop" tabindex="-1"></div>
     <div class="note-card polaroid" tabindex="-1">
-      <p class="font-serif italic text-rose text-sm mb-2">safety</p>
-      <h2 id="safety-title" class="font-serif text-3xl text-ink mb-4">You deserve real help.</h2>
+      <p class="font-serif italic text-rose text-sm mb-2" data-i18n="safety.kicker">safety</p>
+      <h2 id="safety-title" class="font-serif text-3xl text-ink mb-4" data-i18n="safety.title">You deserve real help.</h2>
       <div id="safety-body" class="font-serif text-ink/80 text-lg leading-relaxed space-y-3">
-        <p id="safety-copy">
+        <p id="safety-copy" data-i18n="safety.copy">
           If you might hurt yourself, or you feel in immediate danger, please talk to a real person right now.
         </p>
-        <p class="text-xs text-ink/45 font-serif italic" id="safety-subcopy">
+        <p class="text-xs text-ink/45 font-serif italic" id="safety-subcopy" data-i18n="safety.subcopy">
           This page stays offline and does not place phone links. Numbers are shown for you to dial.
         </p>
 
         <div class="polaroid p-4 bg-paper/70">
-          <p class="font-serif italic text-ink/70 mb-2">Suggested options for your area:</p>
+          <p class="font-serif italic text-ink/70 mb-2" data-i18n="safety.options">Suggested options for your area:</p>
           <ul id="safety-list" class="list-disc pl-5 space-y-1 text-ink/80"></ul>
         </div>
 
-        <p class="text-sm text-ink/60 font-serif italic">
+        <p class="text-sm text-ink/60 font-serif italic" data-i18n="safety.danger">
           If you are in danger right now, prioritize emergency services or someone near you.
         </p>
       </div>
 
       <div class="flex items-center gap-3 mt-6">
-        <button id="safety-continue" class="btn-primary" type="button">stay with me</button>
-        <button id="safety-close" class="btn-ghost" type="button">dismiss</button>
+        <button id="safety-continue" class="btn-primary" type="button" data-i18n="safety.continue">stay with me</button>
+        <button id="safety-close" class="btn-ghost" type="button" data-i18n="safety.dismiss">dismiss</button>
       </div>
     </div>
   </div>

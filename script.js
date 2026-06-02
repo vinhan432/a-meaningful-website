@@ -120,34 +120,83 @@
       'export.fail':      "I couldn't save the file. Try again?",
 
       // Breathing
-      'breath.eyebrow':   'a small pause',
-      'breath.title.l1':  'Breathe',
-      'breath.title.l2':  'with me',
-      'breath.sub':       'A short, simple breath. No special technique. Just a small rest for your chest.',
-      'breath.start':     'begin',
-      'breath.stop':      'rest',
-      'breath.cycles':    'cycles so far',
-      'breath.in':        'breathe in',
-      'breath.hold':      'hold',
-      'breath.out':       'breathe out',
-      'breath.rest':      'rest',
-      'breath.done':      'Well done. Notice how your chest feels. Even a tiny bit different is enough.',
+      'breath.eyebrow':    'a small breath practice',
+      'breath.title.l1':   'Breathe',
+      'breath.title.l2':   'with me',
+      'breath.sub':        'A short, simple breath. No special technique. Just a small rest for your chest.',
+      'breath.start':      'begin',
+      'breath.stop':       'rest',
+      'breath.cycles':     'cycles so far',
+      'breath.in':         'breathe in',
+      'breath.hold':       'hold',
+      'breath.out':        'breathe out',
+      'breath.rest':       'rest',
+      'breath.done':       'Well done. Notice how your chest feels. Even a tiny bit different is enough.',
+      'breath.presetLabel':'preset',
+      'breath.resetLabel': 'reset',
+      'breath.notRunning': 'Not running.',
+      'breath.cycleLabel': 'cycle',
+      'breath.phaseLabel': 'phase',
+      'breath.disclaimer': 'If you feel dizzy or uncomfortable, stop. Your nervous system deserves gentleness.',
 
       // Grounding 5-4-3-2-1
-      'ground.eyebrow':   'come back to the room',
-      'ground.title.l1':  'Five, four, three,',
-      'ground.title.l2':  'two, one',
-      'ground.sub':       'A gentle way to remember you are here. Tap each sense when you have found one.',
-      'ground.5':         '5 things you can see',
-      'ground.4':         '4 things you can touch',
-      'ground.3':         '3 things you can hear',
-      'ground.2':         '2 things you can smell',
-      'ground.1':         '1 thing you can taste',
-      'ground.ph':        'name it softly...',
-      'ground.done':      'You are here. That is the whole point.',
+      'ground.eyebrow':    'come back to the room',
+      'ground.title.l1':   'Five, four, three,',
+      'ground.title.l2':   'two, one',
+      'ground.sub':        'A gentle way to remember you are here. Tap each sense when you have found one.',
+      'ground.5':          '5 things you can see',
+      'ground.4':          '4 things you can touch',
+      'ground.3':          '3 things you can hear',
+      'ground.2':          '2 things you can smell',
+      'ground.1':          '1 thing you can taste',
+      'ground.ph':         'name it softly...',
+      'ground.done':       'You are here. That is the whole point.',
+      'ground.stepLabel':  'step',
+      'ground.next':       'next gently',
+      'ground.resetLabel': 'start over',
+
+      // Safety modal
+      'safety.kicker':     'safety',
+      'safety.title':      'You deserve real help.',
+      'safety.copy':       'If you might hurt yourself, or you feel in immediate danger, please talk to a real person right now.',
+      'safety.subcopy':    'This page stays offline and does not place phone links. Numbers are shown for you to dial.',
+      'safety.options':    'Suggested options for your area:',
+      'safety.danger':     'If you are in danger right now, prioritize emergency services or someone near you.',
+      'safety.continue':   'stay with me',
+      'safety.dismiss':    'dismiss',
+
+      // Mini-games
+      'mini.eyebrow':     'small play, soft focus',
+      'mini.title.l1':    'No-score',
+      'mini.title.l2':    'mini-games',
+      'mini.sub':         'Touch slowly. Breathe while it happens. Nothing here is measured — only your attention.',
+
+      // Tap mini-game
+      'tap.eyebrow':      'a gentle rhythm',
+      'tap.title':        'Quiet Tap',
+      'tap.sub':          'Tap the "flower" when it opens. No streak. Just timing.',
+      'tap.statusLabel': 'status',
+      'tap.status.idle':  'waiting...',
+      'tap.status.on':    'tap to start',
+      'tap.start':        'start gently',
+      'tap.reset':        'reset',
+      'tap.hint':         'Tip:',
+      'tap.hint2':        'slow taps are the right taps.',
+
+      // Wind mini-game
+      'wind.eyebrow':     'a moving quiet',
+      'wind.title':       'Paper Wind',
+      'wind.sub':         'Move your pointer and watch soft paper pieces drift.',
+      'wind.statusLabel':'status',
+      'wind.status.on':  'ready',
+      'wind.pause':       'pause motion',
+      'wind.clear':       'clear pieces',
+      'wind.hint':        'Hint:',
+      'wind.hint2':       'hover gently; let the drift do the work.',
 
       // Floating help
-      'help.float':       'I need a real person'
+      'help.float':      'I need a real person',
+      'help.noMatch':     'no matches. try a different word.'
     },
 
     vi: {
@@ -253,34 +302,83 @@
       'export.fail':      'Mình chưa lưu được tệp. Thử lại nhé?',
 
       // Breathing
-      'breath.eyebrow':   'một khoảng dừng nhỏ',
-      'breath.title.l1':  'Thở',
-      'breath.title.l2':  'cùng mình',
-      'breath.sub':       'Một hơi thở ngắn và đơn giản. Không cần kỹ thuật gì đâu. Chỉ là cho lồng ngực nghỉ một chút.',
-      'breath.start':     'bắt đầu',
-      'breath.stop':      'nghỉ',
-      'breath.cycles':    'vòng đã thở',
-      'breath.in':        'hít vào',
-      'breath.hold':      'giữ',
-      'breath.out':       'thở ra',
-      'breath.rest':      'nghỉ',
-      'breath.done':      'Bạn đã làm được. Để ý xem lồng ngực bây giờ thế nào. Dù chỉ khác đi một chút thôi cũng đủ rồi.',
+      'breath.eyebrow':    'một khoảng thở nhỏ',
+      'breath.title.l1':   'Thở',
+      'breath.title.l2':   'cùng mình',
+      'breath.sub':        'Một hơi thở ngắn và đơn giản. Không cần kỹ thuật gì đâu. Chỉ là cho lồng ngực nghỉ một chút.',
+      'breath.start':      'bắt đầu',
+      'breath.stop':       'nghỉ',
+      'breath.cycles':     'vòng đã thở',
+      'breath.in':         'hít vào',
+      'breath.hold':       'giữ',
+      'breath.out':        'thở ra',
+      'breath.rest':       'nghỉ',
+      'breath.done':       'Bạn đã làm được. Để ý xem lồng ngực bây giờ thế nào. Dù chỉ khác đi một chút thôi cũng đủ rồi.',
+      'breath.presetLabel':'nhịp',
+      'breath.resetLabel': 'làm lại',
+      'breath.notRunning': 'Chưa bắt đầu.',
+      'breath.cycleLabel': 'vòng',
+      'breath.phaseLabel': 'phần',
+      'breath.disclaimer': 'Nếu thấy chóng mặt hoặc khó chịu, hãy dừng lại. Hệ thần thần kinh của bạn xứng đáng được dịu dàng.',
 
       // Grounding
-      'ground.eyebrow':   'quay lại căn phòng',
-      'ground.title.l1':  'Năm, bốn, ba,',
-      'ground.title.l2':  'hai, một',
-      'ground.sub':       'Một cách nhẹ nhàng để nhớ rằng bạn đang ở đây. Chạm mỗi giác quan khi bạn đã tìm được một thứ.',
-      'ground.5':         '5 thứ bạn nhìn thấy',
-      'ground.4':         '4 thứ bạn chạm được',
-      'ground.3':         '3 thứ bạn nghe được',
-      'ground.2':         '2 thứ bạn ngửi được',
-      'ground.1':         '1 thứ bạn nếm được',
-      'ground.ph':        'gọi tên nó thật khẽ...',
-      'ground.done':      'Bạn đang ở đây. Vậy là đủ rồi.',
+      'ground.eyebrow':    'quay lại căn phòng',
+      'ground.title.l1':   'Năm, bốn, ba,',
+      'ground.title.l2':   'hai, một',
+      'ground.sub':        'Một cách nhẹ nhàng để nhớ rằng bạn đang ở đây. Chạm mỗi giác quan khi bạn đã tìm được một thứ.',
+      'ground.5':          'Tìm 5 thứ bạn nhìn thấy',
+      'ground.4':          'Tìm 4 thứ bạn chạm được',
+      'ground.3':          'Tìm 3 thứ bạn nghe được',
+      'ground.2':          'Tìm 2 thứ bạn ngửi được',
+      'ground.1':          'Tìm 1 thứ bạn nếm được',
+      'ground.ph':         'gọi tên nó thật khẽ...',
+      'ground.done':       'Bạn đang ở đây. Vậy là đủ rồi.',
+      'ground.stepLabel':  'bước',
+      'ground.next':       'tiếp theo',
+      'ground.resetLabel': 'bắt đầu lại',
+
+      // Safety modal
+      'safety.kicker':     'an toàn',
+      'safety.title':      'Bạn xứng đáng được giúp đỡ thật sự.',
+      'safety.copy':       'Nếu bạn có thể tự làm tổn thương mình, hoặc cảm thấy nguy hiểm ngay lúc này, hãy nói chuyện với một người thật ngay bây giờ.',
+      'safety.subcopy':    'Trang này hoạt động ngoại tuyến và không đặt đường link gọi điện. Số điện thoại hiển thị để bạn tự bấm.',
+      'safety.options':    'Gợi ý cho khu vực của bạn:',
+      'safety.danger':     'Nếu bạn đang nguy hiểm ngay lúc này, hãy ưu tiên dịch vụ khẩn cấp hoặc ai đó gần bạn.',
+      'safety.continue':   'ở lại với mình',
+      'safety.dismiss':    'đóng lại',
+
+      // Mini-games
+      'mini.eyebrow':     'chơi nhẹ, nhìn dịu',
+      'mini.title.l1':    'Không điểm',
+      'mini.title.l2':    'trò chơi nhỏ',
+      'mini.sub':         'Chạm chậm thôi. Thở khi điều đó xảy ra. Không có gì ở đây được tính — chỉ sự chú ý của bạn thôi.',
+
+      // Tap mini-game
+      'tap.eyebrow':      'một nhịp đều',
+      'tap.title':       'Gõ Nhẹ',
+      'tap.sub':         'Gõ vào "bông hoa" khi nó nở. Không có chuỗi. Chỉ là nhịp thôi.',
+      'tap.statusLabel': 'trạng thái',
+      'tap.status.idle': 'đang chờ...',
+      'tap.status.on':   'gõ để bắt đầu',
+      'tap.start':       'bắt đầu nhẹ nhàng',
+      'tap.reset':       'làm lại',
+      'tap.hint':        'Mẹo:',
+      'tap.hint2':       'những cú gõ chậm mới là cú đúng.',
+
+      // Wind mini-game
+      'wind.eyebrow':     'sự tĩnh lặng chuyển động',
+      'wind.title':       'Gió Giấy',
+      'wind.sub':         'Di chuyển con trỏ và xem những mảnh giấy mềm trôi nhẹ.',
+      'wind.statusLabel':'trạng thái',
+      'wind.status.on':  'sẵn sàng',
+      'wind.pause':       'tạm dừng',
+      'wind.clear':       'xóa mảnh',
+      'wind.hint':        'Gợi ý:',
+      'wind.hint2':       'di nhẹ thôi; để những mảnh giấy tự trôi.',
 
       // Floating help
-      'help.float':       'mình cần một người thật'
+      'help.float':        'mình cần một người thật',
+      'help.noMatch':      'không tìm thấy. thử một từ khác nhé.'
     }
   };
 
@@ -343,97 +441,192 @@
   // ----- 1c. WHISPERS -----
   // 30+ of each, hand-written, never repeated within a session.
   const WHISPERS = {
-    advice: [
-      'You are not behind. You are exactly where your body is.',
-      'Breathe in for four. Out for six. The world can wait.',
-      'You have survived 100% of your hardest days so far.',
-      'It is okay to do the smallest possible thing today.',
-      'Rest is not laziness. It is repair.',
-      'You do not have to earn your place here. It is already yours.',
-      'A shower. A glass of water. That is a beginning.',
-      'Your nervous system is doing its best with what it has.',
-      'You are allowed to be a beginner at being okay.',
-      'Soft is not the same as weak.',
-      'You do not have to explain your mood to be valid.',
-      'A heavy day is not a wasted day.',
-      'You are not broken. You are weathered, like good wood.',
-      'The quietest victories still count.',
-      'Your worth is not a score on a screen.',
-      'Slow breaths. You are not in a race.',
-      'It is okay to ask for help. It is brave, not weak.',
-      'You are allowed to be held by small things — a song, a tea, a sky.',
-      'One thing at a time. One breath at a time.',
-      'You are not a burden. You are a person, having a day.',
-      'There is no deadline on healing.',
-      'Your body is listening. Be kind in how you speak to it.',
-      'You are more than the worst thought you had this week.',
-      'You are allowed to take up space, even quietly.',
-      'A small win is still a win. Celebrate it with a breath.',
-      'You are not failing. You are feeling. They are different.',
-      'Even this moment will pass. Softly. Like a cloud.',
-      'You are doing better than your inner critic says.',
-      'You do not have to be "fine." You just have to be here.',
-      'A door is not a wall. If one closes, another will open — gently, when you are ready.'
-    ],
-    starMessages: [
-      'You are a small light in a very large sky, and that is enough.',
-      'Stars do not apologize for shining.',
-      'You are not alone in this dark — there are hands you have not met yet.',
-      'The night is long, but it is not forever.',
-      'You are held by the same gravity that holds the stars.',
-      'A light this small can still guide someone home.',
-      'You are not falling. You are just between moments.',
-      'The sky keeps the stars company. So do I.',
-      'You can be dim and still matter.',
-      'Even the moon goes through phases. So do you.',
-      'You belong to a constellation you have not finished drawing yet.',
-      'Quiet lights are still lights.',
-      'You are not lost. You are exploring a dark room, slowly.',
-      'The dark is not your enemy. It is a place to rest your eyes.',
-      'You are made of the same dust as the stars. So is everyone who hurt you.',
-      'There is a map being drawn by every step you take.',
-      'You can change the shape of your sky any night you want.',
-      'You do not have to shine all the time to be seen.',
-      'Some lights are meant to be felt, not seen.',
-      'A single star still tells you the night is not endless.',
-      'You are not a fixed point. You are a journey, and the journey is beautiful.',
-      'There is a name for the color of your light. It is hope.',
-      'The dark is just the sky holding its breath with you.',
-      'You are allowed to be a sky, not just a single point of light.',
-      'Even on the dimmest night, you are still here. That is the point.'
-    ],
-    bubblePop: [
-      'Drink a small glass of water. Right now.',
-      'Put your hand on your chest. Feel it rise and fall.',
-      'You are not late. You are on your own time.',
-      'A stretch counts as a movement. Try one shoulder.',
-      'You are allowed to be unproductive today.',
-      'Look at one thing in this room that you like.',
-      'A blanket is a perfectly good decision.',
-      'You have a body. It is doing so much for you.',
-      'The next breath is free. Take it.',
-      'You are not a problem to be solved.',
-      'A song you love is one tap away.',
-      'Your slowest day is still a day you lived.',
-      'You can do the next thing, and only the next thing.',
-      'There is no wrong way to rest.',
-      'You are softer than you think. That is a strength.',
-      'A small walk to the window is allowed.',
-      'You can change your mind. That is not failure.',
-      'You are allowed to be the slowest person in the room.',
-      'A piece of fruit is a perfectly good snack.',
-      'You are doing your best with what you have right now.',
-      'A single kind sentence to yourself is enough.',
-      'You are not your worst thought.',
-      'A pause is not a problem. It is a repair.',
-      'You are allowed to be a person, not a performance.',
-      'One small thing: unclench your jaw.',
-      'You are a work in progress, and that is the whole point.',
-      'A warm drink is a tiny act of love.',
-      'You are not a burden for feeling heavy.',
-      'A deep breath out is sometimes the bravest thing.',
-      'You are allowed to take the long way home.'
-    ]
+    en: {
+      advice: [
+        'You are not behind. You are exactly where your body is.',
+        'Breathe in for four. Out for six. The world can wait.',
+        'You have survived 100% of your hardest days so far.',
+        'It is okay to do the smallest possible thing today.',
+        'Rest is not laziness. It is repair.',
+        'You do not have to earn your place here. It is already yours.',
+        'A shower. A glass of water. That is a beginning.',
+        'Your nervous system is doing its best with what it has.',
+        'You are allowed to be a beginner at being okay.',
+        'Soft is not the same as weak.',
+        'You do not have to explain your mood to be valid.',
+        'A heavy day is not a wasted day.',
+        'You are not broken. You are weathered, like good wood.',
+        'The quietest victories still count.',
+        'Your worth is not a score on a screen.',
+        'Slow breaths. You are not in a race.',
+        'It is okay to ask for help. It is brave, not weak.',
+        'You are allowed to be held by small things — a song, a tea, a sky.',
+        'One thing at a time. One breath at a time.',
+        'You are not a burden. You are a person, having a day.',
+        'There is no deadline on healing.',
+        'Your body is listening. Be kind in how you speak to it.',
+        'You are more than the worst thought you had this week.',
+        'You are allowed to take up space, even quietly.',
+        'A small win is still a win. Celebrate it with a breath.',
+        'You are not failing. You are feeling. They are different.',
+        'Even this moment will pass. Softly. Like a cloud.',
+        'You are doing better than your inner critic says.',
+        'You do not have to be "fine." You just have to be here.',
+        'A door is not a wall. If one closes, another will open — gently, when you are ready.'
+      ],
+      starMessages: [
+        'You are a small light in a very large sky, and that is enough.',
+        'Stars do not apologize for shining.',
+        'You are not alone in this dark — there are hands you have not met yet.',
+        'The night is long, but it is not forever.',
+        'You are held by the same gravity that holds the stars.',
+        'A light this small can still guide someone home.',
+        'You are not falling. You are just between moments.',
+        'The sky keeps the stars company. So do I.',
+        'You can be dim and still matter.',
+        'Even the moon goes through phases. So do you.',
+        'You belong to a constellation you have not finished drawing yet.',
+        'Quiet lights are still lights.',
+        'You are not lost. You are exploring a dark room, slowly.',
+        'The dark is not your enemy. It is a place to rest your eyes.',
+        'You are made of the same dust as the stars. So is everyone who hurt you.',
+        'There is a map being drawn by every step you take.',
+        'You can change the shape of your sky any night you want.',
+        'You do not have to shine all the time to be seen.',
+        'Some lights are meant to be felt, not seen.',
+        'A single star still tells you the night is not endless.',
+        'You are not a fixed point. You are a journey, and the journey is beautiful.',
+        'There is a name for the color of your light. It is hope.',
+        'The dark is just the sky holding its breath with you.',
+        'You are allowed to be a sky, not just a single point of light.',
+        'Even on the dimmest night, you are still here. That is the point.'
+      ],
+      bubblePop: [
+        'Drink a small glass of water. Right now.',
+        'Put your hand on your chest. Feel it rise and fall.',
+        'You are not late. You are on your own time.',
+        'A stretch counts as a movement. Try one shoulder.',
+        'You are allowed to be unproductive today.',
+        'Look at one thing in this room that you like.',
+        'A blanket is a perfectly good decision.',
+        'You have a body. It is doing so much for you.',
+        'The next breath is free. Take it.',
+        'You are not a problem to be solved.',
+        'A song you love is one tap away.',
+        'Your slowest day is still a day you lived.',
+        'You can do the next thing, and only the next thing.',
+        'There is no wrong way to rest.',
+        'You are softer than you think. That is a strength.',
+        'A small walk to the window is allowed.',
+        'You can change your mind. That is not failure.',
+        'You are allowed to be the slowest person in the room.',
+        'A piece of fruit is a perfectly good snack.',
+        'You are doing your best with what you have right now.',
+        'A single kind sentence to yourself is enough.',
+        'You are not your worst thought.',
+        'A pause is not a problem. It is a repair.',
+        'You are allowed to be a person, not a performance.',
+        'One small thing: unclench your jaw.',
+        'You are a work in progress, and that is the whole point.',
+        'A warm drink is a tiny act of love.',
+        'You are not a burden for feeling heavy.',
+        'A deep breath out is sometimes the bravest thing.',
+        'You are allowed to take the long way home.'
+      ]
+    },
+    vi: {
+      advice: [
+        'Bạn không hề chậm hơn ai cả. Bạn đang ở đúng chỗ cơ thể bạn đang ở.',
+        'Hít vào bốn giây. Ra sáu giây. Thế giới có thể đợi.',
+        'Bạn đã sống sót qua 100% những ngày khó khăn nhất cho đến giờ.',
+        'Hôm nay làm điều nhỏ nhất cũng được.',
+        'Nghỉ ngơi không phải lười. Đó là sửa chữa.',
+        'Bạn không cần phải xứng đáng mới được ở đây. Chỗ này đã là của bạn rồi.',
+        'Một cái tắm. Một ly nước. Vậy là bắt đầu rồi.',
+        'Hệ thần kinh của bạn đang cố hết sức với những gì nó có.',
+        'Bạn được phép là người mới bắt đầu học cách ổn.',
+        'Dịu dàng không giống yếu đuối.',
+        'Bạn không cần phải giải thích tâm trạng để được công nhận.',
+        'Một ngày nặng nề không phải một ngày lãng phí.',
+        'Bạn không hề hỏng. Bạn được tôi luyện, như gỗ tốt.',
+        'Những chiến thắng lặng lẽ nhất vẫn được tính.',
+        'Giá trị của bạn không phải là điểm số trên màn hình.',
+        'Thở chậm thôi. Bạn không phải đang đua.',
+        'Xin giúp đỡ là được. Đó là dũng cảm, không phải yếu đuối.',
+        'Bạn được phép để những điều nhỏ ôm lấy — một bài hát, một tách trà, một bầu trời.',
+        'Một thứ mỗi lần. Một hơi mỗi lần.',
+        'Bạn không phải gánh nặng. Bạn là một người, đang trải qua một ngày.',
+        'Không có hạn chót cho việc chữa lành.',
+        'Cơ thể bạn đang lắng nghe. Hãy dịu dàng khi nói với nó.',
+        'Bạn hơn cả suy nghĩ tệ nhất bạn từng có tuần này.',
+        'Bạn được phép chiếm không gian, dù là lặng lẽ.',
+        'Một chiến thắng nhỏ vẫn là chiến thắng. Ăn mừng nó bằng một hơi thở.',
+        'Bạn không thất bại. Bạn đang cảm nhận. Hai điều đó khác nhau.',
+        'Khoảnh khắc này cũng sẽ qua. Nhẹ nhàng. Như một đám mây.',
+        'Bạn đang làm tốt hơn những gì người phán xét bên trong bạn nói.',
+        'Bạn không cần phải "ổn." Bạn chỉ cần ở đây thôi.',
+        'Một cánh cửa không phải bức tường. Nếu một cánh đóng, cánh khác sẽ mở — nhẹ nhàng, khi bạn sẵn sàng.'
+      ],
+      starMessages: [
+        'Bạn là một ánh sáng nhỏ trong bầu trời rất rộng, và vậy là đủ.',
+        'Sao không xin lỗi vì tỏa sáng.',
+        'Bạn không cô đơn trong bóng tối này — có những bàn tay bạn chưa gặp.',
+        'Đêm dài, nhưng không phải mãi mãi.',
+        'Bạn được giữ bởi cùng lực hấp dẫn giữ các ngôi sao.',
+        'Ánh sáng nhỏ thế này vẫn có thể dẫn ai đó về nhà.',
+        'Bạn không đang rơi. Bạn chỉ đang giữa hai khoảnh khắc.',
+        'Bầu trời bầu bạn với các ngôi sao. Mình cũng vậy.',
+        'Bạn có thể mờ nhạt và vẫn quan trọng.',
+        'Ngay cả mặt trăng cũng có lúc tròn lúc khuyết. Bạn cũng vậy.',
+        'Bạn thuộc về một chòm sao bạn chưa vẽ xong.',
+        'Ánh sáng lặng lẽ vẫn là ánh sáng.',
+        'Bạn không lạc. Bạn đang khám phá một căn phòng tối, từ từ.',
+        'Bóng tối không phải kẻ thù. Nó là nơi để mắt bạn nghỉ.',
+        'Bạn được làm từ cùng bụi sao với các ngôi sao. Kẻ làm bạn đau cũng vậy.',
+        'Có một bản đồ đang được vẽ bởi mỗi bước bạn đi.',
+        'Bạn có thể đổi hình dạng bầu trời bất cứ đêm nào bạn muốn.',
+        'Bạn không cần phải sáng mãi để được nhìn thấy.',
+        'Một số ánh sáng được tạo ra để cảm nhận, không phải để nhìn thấy.',
+        'Một ngôi sao đơn lẻ vẫn nói với bạn rằng đêm không vô tận.',
+        'Bạn không phải một điểm cố định. Bạn là một hành trình, và hành trình đó đẹp.',
+        'Có một tên cho màu ánh sáng của bạn. Đó là hy vọng.',
+        'Bóng tối chỉ là bầu trời nín thở cùng bạn.',
+        'Bạn được phép là cả bầu trời, không chỉ một điểm sáng.',
+        'Ngay cả đêm mờ nhất, bạn vẫn ở đây. Đó là điều quan trọng.'
+      ],
+      bubblePop: [
+        'Uống một ly nước nhỏ. Ngay bây giờ.',
+        'Đặt tay lên ngực. Cảm thấy nó phồng lên và hạ xuống.',
+        'Bạn không trễ. Bạn đang theo nhịp của riêng mình.',
+        'Một cái duỗi người cũng là vận động. Thử một bên vai đi.',
+        'Hôm nay bạn được phép không hiệu quả.',
+        'Nhìn một thứ trong phòng này mà bạn thích.',
+        'Một cái chăn là một quyết định hoàn toàn tốt.',
+        'Bạn có một cơ thể. Nó đang làm rất nhiều cho bạn.',
+        'Hơi thở tiếp theo miễn phí. Lấy đi.',
+        'Bạn không phải vấn đề cần giải quyết.',
+        'Một bài hát bạn yêu thích chỉ cách một lần chạm.',
+        'Ngày chậm nhất của bạn vẫn là ngày bạn đã sống.',
+        'Bạn có thể làm điều tiếp theo, và chỉ điều tiếp theo.',
+        'Không có cách nào sai để nghỉ ngơi.',
+        'Bạn mềm mại hơn bạn nghĩ. Đó là sức mạnh.',
+        'Một bước nhỏ đến cửa sổ cũng được.',
+        'Bạn được phép đổi ý. Đó không phải thất bại.',
+        'Bạn được phép là người chậm nhất trong phòng.',
+        'Một miếng trái cây là một bữa xế hoàn toàn tốt.',
+        'Bạn đang cố hết sức với những gì bạn có lúc này.',
+        'Một câu tử tế với chính mình là đủ.',
+        'Bạn không phải suy nghĩ tệ nhất của bạn.',
+        'Một khoảng dừng không phải vấn đề. Đó là sửa chữa.',
+        'Bạn được phép là một con người, không phải một màn trình diễn.',
+        'Một điều nhỏ: thả lỏng hàm đi.',
+        'Bạn đang trong quá trình hoàn thiện, và đó là cả ý nghĩa.',
+        'Một thức uống ấm là một hành động nhỏ của tình yêu.',
+        'Bạn không phải gánh nặng vì cảm thấy nặng nề.',
+        'Một hơi thở ra sâu đôi khi là điều dũng cảm nhất.',
+        'Bạn được phép đi đường dài về nhà.'
+      ]
+    }
   };
 
   // Mood labels (lookup by index for i18n)
@@ -963,7 +1156,7 @@
       State.breath.phaseDurationMs = phase.ms || 0;
       persist();
 
-      els.cycleCounter.textContent = `${State.breath.cycles}`;
+      els.cycles.textContent = `${State.breath.cycles}`;
       els.phaseText.textContent = t('breath.' + (label === 'in' ? 'in' : label === 'out' ? 'out' : label === 'hold' ? 'hold' : 'rest'));
       els.phaseSub.textContent = t('breath.cycles');
       els.ringProgress.style.setProperty('--p', `${Math.round(0)}%`);
@@ -1020,7 +1213,7 @@
         status: document.getElementById('breath-status'),
         cycles: document.getElementById('breath-cycles'),
         phaseText: document.getElementById('breath-phase'),
-        phaseSub: document.getElementById('breath-cycle'),
+        phaseSub: document.getElementById('breath-cycle-sub'),
         ringProgress: document.querySelector('.breath-ring-progress'),
         ringInner: document.querySelector('.breath-ring-inner')
       };
@@ -1137,26 +1330,21 @@
         stepButtons: Array.from(document.querySelectorAll('.ground-step-btn[data-step]')),
         label: document.getElementById('ground-step-label'),
         instructions: document.getElementById('ground-instructions'),
-        senseEls: Array.from(document.querySelectorAll('.ground-sense')),
+        instructionText: document.getElementById('ground-instruction-text'),
         next: document.getElementById('ground-next'),
         reset: document.getElementById('ground-reset'),
-        doneWrap: document.getElementById('ground-done'),
-        doneTitle: document.getElementById('ground-done-title'),
-        counter: document.getElementById('ground-counter')
+        doneWrap: document.getElementById('ground-done')
       };
 
       if (!els.label || !els.instructions || !els.next || !els.reset) return;
 
       els.stepButtons.forEach(b => {
-        const n = parseInt(b.getAttribute('data-step'), 10);
-        const stepNum = 5 - n; // not used; keep stable
         const idx = parseInt(b.getAttribute('data-step'), 10); // 5..1
         const my = parseInt(String(currentStep().key), 10);
         b.classList.toggle('active', idx === my);
       });
 
       const step = currentStep();
-      const idx = State.ground.step;
 
       if (State.ground.done) {
         if (els.doneWrap) els.doneWrap.classList.remove('hidden');
@@ -1168,14 +1356,7 @@
         if (els.next) els.next.classList.remove('hidden');
         if (els.instructions) els.instructions.classList.remove('hidden');
         els.label.textContent = t(step.i18n);
-        // Placeholder extra instructions: use ground.ph as generic prompt.
-        const phEl = els.instructions.querySelector('.ground-ph');
-        if (phEl) phEl.textContent = t('ground.ph');
-        // If there is a specific sense line, update it minimally.
-        els.senseEls.forEach(el => {
-          // no strong mapping available; keep generic
-          el.textContent = t('ground.ph');
-        });
+        if (els.instructionText) els.instructionText.textContent = t(step.i18n);
       }
       persist();
     }
@@ -1479,7 +1660,8 @@
     function showWhisper(star) {
       const el = document.getElementById('sky-whisper');
       const idx = State.sky.findIndex(s => s.id === star.id);
-      const msg = WHISPERS.starMessages[idx % WHISPERS.starMessages.length];
+      const dict = WHISPERS[State.user.locale] || WHISPERS.en;
+      const msg = dict.starMessages[idx % dict.starMessages.length];
       const releaseLabel = State.user.locale === 'vi' ? 'buông ngôi sao này' : 'release this star';
       el.innerHTML = `<span>${msg}</span> <button class="release-btn" data-id="${star.id}">${releaseLabel}</button>`;
       el.classList.add('show');
@@ -1710,7 +1892,8 @@
       let msg;
       let tries = 0;
       do {
-        msg = WHISPERS.bubblePop[Math.floor(Math.random() * WHISPERS.bubblePop.length)];
+        const wDict = WHISPERS[State.user.locale] || WHISPERS.en;
+        msg = wDict.bubblePop[Math.floor(Math.random() * wDict.bubblePop.length)];
         tries++;
       } while (used.has(msg) && tries < 12);
       used.add(msg);
@@ -1783,7 +1966,7 @@
         gHost.appendChild(div);
       });
     if (gHost.children.length === 0) {
-      gHost.innerHTML = '<p class="text-ink/50 font-serif italic col-span-2">no matches. try a different word.</p>';
+      gHost.innerHTML = `<p class="text-ink/50 font-serif italic col-span-2">${t('help.noMatch')}</p>`;
     }
 
     // Community
