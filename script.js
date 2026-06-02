@@ -1169,7 +1169,8 @@
         if (els.instructions) els.instructions.classList.remove('hidden');
         els.label.textContent = t(step.i18n);
         // Placeholder extra instructions: use ground.ph as generic prompt.
-        els.instructions.querySelector('.ground-ph')?.textContent = t('ground.ph');
+        const phEl = els.instructions.querySelector('.ground-ph');
+        if (phEl) phEl.textContent = t('ground.ph');
         // If there is a specific sense line, update it minimally.
         els.senseEls.forEach(el => {
           // no strong mapping available; keep generic
