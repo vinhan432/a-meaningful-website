@@ -192,6 +192,7 @@
       'wind.sub':         'Move your pointer and watch soft paper pieces drift.',
       'wind.statusLabel':'status',
       'wind.status.on':  'ready',
+      'wind.status.drift': 'drifting...',
       'wind.pause':       'pause motion',
       'wind.clear':       'clear pieces',
       'wind.hint':        'Hint:',
@@ -386,6 +387,7 @@
       'wind.sub':         'Di chuyển con trỏ và xem những mảnh giấy mềm trôi nhẹ.',
       'wind.statusLabel':'trạng thái',
       'wind.status.on':  'sẵn sàng',
+      'wind.status.drift': 'đang trôi...',
       'wind.pause':       'tạm dừng',
       'wind.clear':       'xóa mảnh',
       'wind.hint':        'Gợi ý:',
@@ -763,6 +765,8 @@
     if (window._sky && window._sky.initialized) window._sky.render();
     if (window._breath) window._breath.refresh();
     if (window._ground) window._ground.refresh();
+    if (window._tap) window._tap.refresh();
+    if (window._wind) window._wind.refresh();
     document.title = t('cover.title');
   }
 
@@ -1668,9 +1672,9 @@
 
     function onClick(e) {
       const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      // Hit-test existing star (within 14px)
+      const x = (e.clientX - rect.left) * dpr;
+      const y = (e.clientY - rect.top) * dpr;
+      // Hit-test existing star (within 14px, already in canvas/dpr coords)
       const hit = placed.slice().reverse().find(s => Math.hypot(s.x - x, s.y - y) < 14 && !s.releasing);
       if (hit) {
         showWhisper(hit);
@@ -1856,6 +1860,8 @@
   window._sky = Sky;
   window._breath = Breath;
   window._ground = Grounding;
+  window._tap = TapQuiet;
+  window._wind = PaperWind;
 
   /* =========================================================
      9. BUBBLE FIELD
@@ -2285,6 +2291,19 @@
       }, reduce ? 140 : 320);
     }
 
+    function refresh() {
+      const toggle = document.getElementById('tap-toggle');
+      const resetBtn = document.getElementById('tap-reset');
+      if (toggle) toggle.textContent = t('tap.start');
+      if (resetBtn) resetBtn.textContent = t('tap.reset');
+      setStatus(t('tap.status.idle'));
+      const hints = document.querySelectorAll('#tap-canvas + * [data-i18n]');
+      hints.forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (key && t(key)) el.textContent = t(key);
+      });
+    }
+
     function bind() {
       const toggle = document.getElementById('tap-toggle');
       const resetBtn = document.getElementById('tap-reset');
@@ -2353,7 +2372,7 @@
       observer.observe(canvas);
     }
 
-    return { init };
+    return { init, refresh };
   })();
 
   /* =========================================================
@@ -2615,7 +2634,14 @@
       observer.observe(canvas);
     }
 
-    return { init };
+    function refresh() {
+      const pauseBtn = document.getElementById('wind-pause');
+      const statusEl = document.getElementById('wind-status');
+      if (pauseBtn) pauseBtn.textContent = paused ? t('wind.resume') : t('wind.pause');
+      if (statusEl && !paused && pieces.length > 0) statusEl.textContent = t('wind.status.drift');
+    }
+
+    return { init, refresh };
   })();
 
   /* =========================================================
