@@ -78,6 +78,7 @@
       'sky.letSing':      'let the sky sing',
       'sky.silenced':     'the sky is quiet now',
       'sky.clear':        'clear my stars',
+      'sky.release':      'release this star',
 
       'help.eyebrow':     'if you need a real voice',
       'help.title.l1':    'Someone',
@@ -260,6 +261,7 @@
       'sky.letSing':      'cho bầu trời hát',
       'sky.silenced':     'bầu trời đang im lặng',
       'sky.clear':        'xoá các sao của mình',
+      'sky.release':      'buông ngôi sao này',
 
       'help.eyebrow':     'nếu bạn cần một giọng thật',
       'help.title.l1':    'Có',
@@ -1662,7 +1664,7 @@
       const idx = State.sky.findIndex(s => s.id === star.id);
       const dict = WHISPERS[State.user.locale] || WHISPERS.en;
       const msg = dict.starMessages[idx % dict.starMessages.length];
-      const releaseLabel = State.user.locale === 'vi' ? 'buông ngôi sao này' : 'release this star';
+      const releaseLabel = t('sky.release');
       el.innerHTML = `<span>${msg}</span> <button class="release-btn" data-id="${star.id}">${releaseLabel}</button>`;
       el.classList.add('show');
       clearTimeout(showWhisper._t);
@@ -2043,6 +2045,523 @@
   }
 
   /* =========================================================
+     12. TAP QUIET (Canvas mini-game)
+     ========================================================= */
+
+  const TapQuiet = (() => {
+    let canvas, ctx, w, h, dpr;
+    let rafId = null;
+    let running = false;
+
+    let reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Flower animation state
+    let flower = { x: 0, y: 0, r: 20, t0: 0, cycle: 0, open: 0 }; // open: 0..1
+    let targetOpenAt = 0; // seconds offset within cycle
+    let userTappedAt = null;
+    let lastTapAt = 0;
+
+    // Pointer/tap interactions
+    let pointerDown = false;
+
+    let observer = null;
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      w = Math.max(1, rect.width);
+      h = Math.max(1, rect.height);
+      dpr = window.devicePixelRatio || 1;
+
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      flower.x = w * 0.5;
+      flower.y = h * 0.53;
+      flower.r = Math.min(26, Math.max(16, Math.min(w, h) * 0.075));
+    }
+
+    function resetFlower(newCycle = true) {
+      if (newCycle) flower.cycle += 1;
+      flower.t0 = Date.now();
+      flower.open = 0;
+      userTappedAt = null;
+
+      // Gentle cycle length
+      const cycleMs = reduce ? 1300 : 2400;
+      const targetMs = reduce ? 650 : (cycleMs * (0.45 + Math.random() * 0.12)); // ~gentle window
+      targetOpenAt = targetMs / 1000;
+
+      running = true;
+      setStatus(t('tap.status.on'));
+    }
+
+    function setStatus(text) {
+      const el = document.getElementById('tap-status');
+      if (el) el.textContent = text;
+    }
+
+    function draw(now) {
+      if (!ctx) return;
+
+      ctx.clearRect(0, 0, w, h);
+
+      // Soft paper background shimmer
+      ctx.fillStyle = State.prefs.theme === 'night'
+        ? 'rgba(37,35,64,0.10)'
+        : 'rgba(251,246,233,0.10)';
+      ctx.fillRect(0, 0, w, h);
+
+      // Baseline (subtle)
+      ctx.strokeStyle = State.prefs.theme === 'night'
+        ? 'rgba(232,231,210,0.08)'
+        : 'rgba(42,37,34,0.08)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(w * 0.12, h * 0.78);
+      ctx.quadraticCurveTo(w * 0.5, h * 0.72, w * 0.88, h * 0.78);
+      ctx.stroke();
+
+      const elapsed = (now - flower.t0) / 1000;
+
+      const cycleSeconds = reduce ? 1.3 : 2.4;
+      const p = Math.max(0, Math.min(1, elapsed / cycleSeconds));
+
+      // Open animation: bloom in then relax
+      const bloom = Math.sin(Math.min(Math.PI, p * Math.PI)) * (reduce ? 0.9 : 1);
+      flower.open = bloom;
+
+      // Flower center
+      const alpha = State.prefs.theme === 'night' ? 0.9 : 1.0;
+
+      // Petals (rings) respond to open progress
+      const petals = 8;
+      for (let i = 0; i < petals; i++) {
+        const a = (i / petals) * Math.PI * 2;
+        const petalLen = flower.r * (0.55 + flower.open * 0.9);
+        const px = flower.x + Math.cos(a) * (flower.r * 0.12);
+        const py = flower.y + Math.sin(a) * (flower.r * 0.12);
+        const tipX = flower.x + Math.cos(a) * petalLen;
+        const tipY = flower.y + Math.sin(a) * petalLen;
+
+        const grd = ctx.createLinearGradient(px, py, tipX, tipY);
+        grd.addColorStop(0, `rgba(232,184,109,${0.25 * alpha})`);
+        grd.addColorStop(1, `rgba(127,183,176,${0.18 * alpha})`);
+        ctx.strokeStyle = grd;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(px, py);
+        ctx.quadraticCurveTo(
+          flower.x + Math.cos(a) * (flower.r * (0.7 + flower.open * 0.35)),
+          flower.y + Math.sin(a) * (flower.r * (0.7 + flower.open * 0.35)),
+          tipX,
+          tipY
+        );
+        ctx.stroke();
+      }
+
+      // Center “seed”
+      ctx.beginPath();
+      ctx.fillStyle = State.prefs.theme === 'night'
+        ? `rgba(244,236,216,${0.18 + flower.open * 0.35})`
+        : `rgba(42,37,34,${0.08 + flower.open * 0.18})`;
+      ctx.arc(flower.x, flower.y, flower.r * (0.30 + flower.open * 0.18), 0, Math.PI * 2);
+      ctx.fill();
+
+      // If we reached the end of cycle, prepare next gentle cycle (no score, continuous)
+      if (elapsed >= cycleSeconds) {
+        // keep it gentle: only auto-reset if running
+        if (running) resetFlower(true);
+      }
+
+      // Target timing marker after open (very subtle)
+      const targetPx = flower.r * (0.95 + flower.open * 0.15);
+      const markerAlpha = reduce ? 0.0 : Math.max(0, 0.45 - Math.abs(elapsed - targetOpenAt) * 2.2);
+      if (markerAlpha > 0.001) {
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(232,184,109,${0.12 * markerAlpha})`;
+        ctx.lineWidth = 2;
+        ctx.arc(flower.x, flower.y, targetPx, 0, Math.PI * 2);
+        ctx.stroke();
+      }
+    }
+
+    function tick(now) {
+      rafId = requestAnimationFrame(tick);
+      if (!running) return;
+      draw(now);
+    }
+
+    function startLoop() {
+      if (rafId) return;
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function stopLoop() {
+      if (!rafId) return;
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+
+    function onUserTap() {
+      if (!running) return;
+      const now = Date.now();
+      lastTapAt = now;
+
+      const elapsedSec = (now - flower.t0) / 1000;
+      userTappedAt = elapsedSec;
+
+      // Gentle “feedback”: if close to target, we do a quick pulse by restarting immediately
+      const diff = Math.abs(elapsedSec - targetOpenAt);
+      const ok = diff < (reduce ? 0.18 : 0.22);
+
+      const status = ok
+        ? (State.user.locale === 'vi' ? 'đã chạm đúng nhịp.' : 'you touched the bloom.')
+        : (State.user.locale === 'vi' ? 'đã chạm.' : 'you touched.');
+      setStatus(status);
+
+      // Briefly pause auto reset and then restart
+      running = true;
+      flower.t0 = Date.now();
+      flower.open = reduce ? 0.6 : Math.min(1, 0.35 + flower.open * 0.35);
+      targetOpenAt = (reduce ? 0.65 : 1.05); // next window closer
+      setTimeout(() => {
+        if (running) resetFlower(true);
+      }, reduce ? 140 : 320);
+    }
+
+    function bind() {
+      const toggle = document.getElementById('tap-toggle');
+      const resetBtn = document.getElementById('tap-reset');
+
+      if (!toggle || !resetBtn || !canvas) return;
+
+      toggle.addEventListener('click', () => {
+        resetFlower(true);
+        running = true;
+        startLoop();
+      });
+
+      resetBtn.addEventListener('click', () => {
+        running = false;
+        setStatus(t('tap.status.idle'));
+        stopLoop();
+        flower.open = 0;
+      });
+
+      const handle = (ev) => {
+        // Respect buttons/keyboard; only for touch/click/tap on canvas
+        ev.preventDefault?.();
+        onUserTap();
+      };
+
+      canvas.addEventListener('pointerdown', handle, { passive: false });
+
+      // Improve mobile UX: keep “tap” responsive without scrolling
+      canvas.style.touchAction = 'manipulation';
+    }
+
+    function init() {
+      canvas = document.getElementById('tap-canvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      // initial UI state
+      setStatus(t('tap.status.idle'));
+      running = false;
+
+      bind();
+
+      observer = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (!running) return;
+          if (!reduce && !en.isIntersecting) {
+            // pause
+            running = false;
+            stopLoop();
+            setStatus(t('tap.status.idle'));
+          } else if (en.isIntersecting) {
+            // resume in a gentle state
+            setTimeout(() => {
+              if (document.hidden) return;
+              running = true;
+              startLoop();
+            }, 0);
+          }
+        });
+      }, { threshold: 0.08 });
+
+      observer.observe(canvas);
+    }
+
+    return { init };
+  })();
+
+  /* =========================================================
+     13. PAPER WIND (Canvas mini-game)
+     ========================================================= */
+
+  const PaperWind = (() => {
+    let canvas, ctx, w, h, dpr;
+    let rafId = null;
+
+    let reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let paused = false;
+
+    let pieces = []; // {x,y,vx,vy,spin,age,seed}
+    let pointer = { x: 0, y: 0, vx: 0, vy: 0, lastX: 0, lastY: 0, lastT: 0 };
+
+    let observer = null;
+
+    function resize() {
+      const rect = canvas.getBoundingClientRect();
+      w = Math.max(1, rect.width);
+      h = Math.max(1, rect.height);
+      dpr = window.devicePixelRatio || 1;
+
+      canvas.width = Math.floor(w * dpr);
+      canvas.height = Math.floor(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    function setStatus(text) {
+      const el = document.getElementById('wind-status');
+      if (el) el.textContent = text;
+    }
+
+    function spawnBurst(n = 6) {
+      const count = reduce ? Math.min(4, n) : n;
+      for (let i = 0; i < count; i++) {
+        const x = pointer.x + (Math.random() - 0.5) * 18;
+        const y = pointer.y + (Math.random() - 0.5) * 14;
+        const seed = Math.random();
+        const speed = reduce ? 0.4 : (0.6 + seed * 0.9);
+        const angle = Math.atan2(pointer.vy, pointer.vx) + (Math.random() - 0.5) * 0.9;
+
+        pieces.push({
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed + (reduce ? 0.08 : 0.14),
+          spin: (Math.random() - 0.5) * (reduce ? 2 : 4),
+          age: 0,
+          life: reduce ? 2200 : 3800,
+          seed
+        });
+      }
+    }
+
+    function clear() {
+      pieces = [];
+      ctx && ctx.clearRect(0, 0, w, h);
+      setStatus(t('wind.status.on'));
+    }
+
+    function updatePointer(ev) {
+      const rect = canvas.getBoundingClientRect();
+      const x = ev.clientX - rect.left;
+      const y = ev.clientY - rect.top;
+
+      const now = performance.now();
+      if (pointer.lastT) {
+        const dt = Math.max(16, now - pointer.lastT);
+        const dx = x - pointer.lastX;
+        const dy = y - pointer.lastY;
+        pointer.vx = dx / dt;
+        pointer.vy = dy / dt;
+      }
+      pointer.x = x;
+      pointer.y = y;
+      pointer.lastX = x;
+      pointer.lastY = y;
+      pointer.lastT = now;
+    }
+
+    function draw(now) {
+      ctx.clearRect(0, 0, w, h);
+
+      // background glow
+      const baseAlpha = State.prefs.theme === 'night' ? 0.09 : 0.07;
+      ctx.fillStyle = `rgba(232,184,109,${baseAlpha})`;
+      ctx.fillRect(0, 0, w, h);
+
+      // Draw pieces
+      for (const p of pieces) {
+        const t = p.age / p.life;
+        const fade = Math.max(0, 1 - t);
+        const size = (reduce ? 10 : 12) + p.seed * 10;
+        const curl = p.seed * 0.6 + t * 1.2;
+
+        const grad = ctx.createLinearGradient(p.x - size, p.y, p.x + size, p.y);
+        grad.addColorStop(0, State.prefs.theme === 'night' ? `rgba(201,184,216,${0.38 * fade})` : `rgba(201,184,216,${0.30 * fade})`);
+        grad.addColorStop(1, State.prefs.theme === 'night' ? `rgba(127,183,176,${0.34 * fade})` : `rgba(127,183,176,${0.26 * fade})`);
+
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.spin + curl);
+        ctx.globalAlpha = 1;
+
+        ctx.fillStyle = grad;
+        ctx.strokeStyle = State.prefs.theme === 'night' ? `rgba(244,236,216,${0.10 * fade})` : `rgba(42,37,34,${0.08 * fade})`;
+        ctx.lineWidth = 1;
+
+        // Simple “paper strip” shape
+        ctx.beginPath();
+        ctx.moveTo(-size * 0.6, -size * 0.1);
+        ctx.quadraticCurveTo(0, -size * 0.8, size * 0.7, -size * 0.05);
+        ctx.quadraticCurveTo(size * 0.3, size * 0.7, -size * 0.6, size * 0.1);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // little crease line
+        ctx.strokeStyle = State.prefs.theme === 'night' ? `rgba(232,184,109,${0.14 * fade})` : `rgba(232,184,109,${0.11 * fade})`;
+        ctx.beginPath();
+        ctx.moveTo(-size * 0.3, -size * 0.05);
+        ctx.quadraticCurveTo(0, size * 0.18, size * 0.28, -size * 0.03);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
+    function tick(now) {
+      rafId = requestAnimationFrame(tick);
+      if (paused) return;
+
+      // physics step
+      for (const p of pieces) {
+        p.age += 16.6;
+
+        // Pointer influence (“wind”)
+        const dx = p.x - pointer.x;
+        const dy = p.y - pointer.y;
+        const dist = Math.max(20, Math.hypot(dx, dy));
+        const influence = reduce ? 0.0018 : 0.0028;
+
+        const ax = (pointer.vx) * (140 / dist) * influence * 1000;
+        const ay = (pointer.vy) * (140 / dist) * influence * 1000 + (reduce ? 0.002 : 0.004);
+
+        p.vx += ax;
+        p.vy += ay;
+
+        // damping + movement
+        p.vx *= reduce ? 0.992 : 0.988;
+        p.vy *= reduce ? 0.992 : 0.985;
+
+        p.x += p.vx * (reduce ? 10 : 12);
+        p.y += p.vy * (reduce ? 10 : 12);
+
+        // wrap / bounds fade
+      }
+
+      // prune dead pieces
+      pieces = pieces.filter(p => p.age < p.life && p.y < h + 60);
+
+      // spawn occasionally based on movement speed
+      if (!reduce && Math.hypot(pointer.vx, pointer.vy) > 0.08 && pieces.length < 30) {
+        spawnBurst(4);
+      }
+
+      draw(now);
+    }
+
+    function startLoop() {
+      if (rafId) return;
+      rafId = requestAnimationFrame(tick);
+    }
+    function stopLoop() {
+      if (!rafId) return;
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
+
+    function bind() {
+      const pauseBtn = document.getElementById('wind-pause');
+      const clearBtn = document.getElementById('wind-clear');
+
+      if (!pauseBtn || !clearBtn || !canvas) return;
+
+      setStatus(t('wind.status.on'));
+      pauseBtn.textContent = t('wind.pause');
+
+      pauseBtn.addEventListener('click', () => {
+        paused = !paused;
+        pauseBtn.textContent = t('wind.pause');
+        setStatus(paused ? (State.user.locale === 'vi' ? 'đang tạm dừng.' : 'paused.') : t('wind.status.on'));
+        if (!paused) startLoop();
+      });
+
+      clearBtn.addEventListener('click', () => clear());
+
+      canvas.style.touchAction = 'none';
+
+      // Pointer-driven wind
+      canvas.addEventListener('pointermove', (ev) => {
+        updatePointer(ev);
+
+        if (pieces.length === 0) {
+          // create initial pieces gently
+          pointer.lastT = performance.now();
+          spawnBurst(7);
+          startLoop();
+        } else if (!reduce && Math.hypot(pointer.vx, pointer.vy) > 0.09 && pieces.length < 36) {
+          spawnBurst(3);
+        }
+      }, { passive: true });
+
+      // Make taps spawn a soft burst too
+      canvas.addEventListener('pointerdown', (ev) => {
+        updatePointer(ev);
+        spawnBurst(8);
+        startLoop();
+      });
+    }
+
+    function init() {
+      canvas = document.getElementById('wind-canvas');
+      if (!canvas) return;
+      ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      resize();
+      window.addEventListener('resize', resize);
+
+      bind();
+      clear();
+
+      // Start with gentle pointer position
+      const rect = canvas.getBoundingClientRect();
+      pointer.x = rect.width * 0.5;
+      pointer.y = rect.height * 0.55;
+      pointer.lastX = pointer.x;
+      pointer.lastY = pointer.y;
+      pointer.lastT = 0;
+
+      observer = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          if (!en.isIntersecting) {
+            paused = true;
+            stopLoop();
+            setStatus(t('wind.status.on'));
+          } else {
+            paused = false;
+            if (pieces.length > 0) startLoop();
+          }
+        });
+      }, { threshold: 0.1 });
+
+      observer.observe(canvas);
+    }
+
+    return { init };
+  })();
+
+  /* =========================================================
      12. BOOT
      ========================================================= */
 
@@ -2129,6 +2648,11 @@
     Grounding.init();
     Garden.init();
     Sky.init();
+
+    // Mini-games (Tap Quiet + Paper Wind)
+    TapQuiet.init();
+    PaperWind.init();
+
     Bubbles.init();
     maybeShowNote();
     persist();
