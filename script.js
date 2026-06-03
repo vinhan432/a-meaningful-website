@@ -77,6 +77,7 @@
       'sky.title.l2':     'Sky',
       'sky.sub':          'Tap the dark. Place a star. They will reach toward each other. The sky is allowed to sing — only when you ask it to.',
       'sky.singBtn':       'let the sky sing',
+      'sky.toggleAria':    'toggle sky sound',
       'sky.silenced':     'the sky is quiet now',
       'sky.clear':        'clear my stars',
       'sky.release':      'release this star',
@@ -269,7 +270,8 @@
       'sky.title.l1':     'Bầu Trời',
       'sky.title.l2':     'Chòm Sao',
       'sky.sub':          'Chạm vào bóng tối. Đặt một ngôi sao. Chúng sẽ với tìm nhau. Bầu trời chỉ hát khi bạn cho phép thôi.',
-      'sky.letSing':      'cho bầu trời hát',
+      'sky.singBtn':      'cho bầu trời hát',
+      'sky.toggleAria':   'bật/tắt âm thanh bầu trời',
       'sky.silenced':     'bầu trời đang im lặng',
       'sky.clear':        'xoá các sao của mình',
       'sky.release':      'buông ngôi sao này',
@@ -748,6 +750,9 @@
     });
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {
       el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+      el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
     });
     document.querySelectorAll('.locale-label').forEach(el => {
       el.classList.toggle('active', el.getAttribute('data-locale') === State.user.locale);
@@ -2641,7 +2646,7 @@
         persist();
         moonBtn.classList.toggle('active', State.prefs.sound === 'soft');
         const label = moonBtn.querySelector('span');
-        if (label) label.textContent = State.prefs.sound === 'soft' ? t('sky.silenced') : t('sky.letSing');
+        if (label) label.textContent = State.prefs.sound === 'soft' ? t('sky.silenced') : t('sky.singBtn');
       });
     }
   }
@@ -2650,68 +2655,88 @@
     const begin = document.getElementById('begin-btn');
     const skip = document.getElementById('begin-skip');
     const input = document.getElementById('name-input');
+    const greeting = document.getElementById('greeting');
+    if (!begin || !skip || !input || !greeting) return;
+
     input.value = State.user.name || '';
     begin.addEventListener('click', () => {
       const v = input.value.trim().slice(0, 32);
       State.user.name = v || null;
       persist();
-      document.getElementById('greeting').scrollIntoView({ behavior: 'smooth' });
+      greeting.scrollIntoView({ behavior: 'smooth' });
       renderGreeting();
     });
     skip.addEventListener('click', () => {
       State.user.name = null;
       input.value = '';
       persist();
-      document.getElementById('greeting').scrollIntoView({ behavior: 'smooth' });
+      greeting.scrollIntoView({ behavior: 'smooth' });
       renderGreeting();
     });
   }
 
   function bindFooter() {
-    document.getElementById('reread-note').addEventListener('click', () => {
-      document.getElementById('note-modal').classList.remove('hidden');
-    });
-    document.getElementById('export-profile').addEventListener('click', exportProfile);
-    document.getElementById('import-profile').addEventListener('click', () => {
-      document.getElementById('import-file').click();
-    });
-    document.getElementById('import-file').addEventListener('change', (e) => {
-      if (e.target.files && e.target.files[0]) importProfile(e.target.files[0]);
-      e.target.value = '';
-    });
-    document.getElementById('reset-profile').addEventListener('click', resetProfile);
+    const rereadBtn = document.getElementById('reread-note');
+    const noteModal = document.getElementById('note-modal');
+    const exportBtn = document.getElementById('export-profile');
+    const importBtn = document.getElementById('import-profile');
+    const importFile = document.getElementById('import-file');
+    const resetBtn = document.getElementById('reset-profile');
+
+    if (rereadBtn && noteModal) {
+      rereadBtn.addEventListener('click', () => {
+        noteModal.classList.remove('hidden');
+      });
+    }
+    if (exportBtn) exportBtn.addEventListener('click', exportProfile);
+    if (importBtn && importFile) {
+      importBtn.addEventListener('click', () => {
+        importFile.click();
+      });
+      importFile.addEventListener('change', (e) => {
+        if (e.target.files && e.target.files[0]) importProfile(e.target.files[0]);
+        e.target.value = '';
+      });
+    }
+    if (resetBtn) resetBtn.addEventListener('click', resetProfile);
   }
 
   function bindHelplineSearch() {
     const input = document.getElementById('helpline-search');
+    if (!input) return;
     input.addEventListener('input', () => renderHelplines(input.value));
   }
 
   function boot() {
-    applyTheme();
-    initAmbient();
-    bindTopBar();
-    bindCover();
-    bindMood();
-    bindTea();
-    bindPlant();
-    bindLamp();
-    bindFooter();
-    bindHelplineSearch();
-    renderHelplines();
-    applyLocale();          // also calls renderGreeting + renderMoodChips
-    Breath.init();
-    Grounding.init();
-    Garden.init();
-    Sky.init();
+    try { applyTheme(); } catch (e) { console.error('applyTheme failed', e); }
+    try { initAmbient(); } catch (e) { console.error('initAmbient failed', e); }
+
+    try { bindTopBar(); } catch (e) { console.error('bindTopBar failed', e); }
+    try { bindCover(); } catch (e) { console.error('bindCover failed', e); }
+    try { bindMood(); } catch (e) { console.error('bindMood failed', e); }
+    try { bindTea(); } catch (e) { console.error('bindTea failed', e); }
+    try { bindPlant(); } catch (e) { console.error('bindPlant failed', e); }
+    try { bindLamp(); } catch (e) { console.error('bindLamp failed', e); }
+    try { bindFooter(); } catch (e) { console.error('bindFooter failed', e); }
+    try { bindHelplineSearch(); } catch (e) { console.error('bindHelplineSearch failed', e); }
+
+    try { renderHelplines(); } catch (e) { console.error('renderHelplines failed', e); }
+
+    try { applyLocale(); } catch (e) { console.error('applyLocale failed', e); } // also calls renderGreeting + renderMoodChips
+
+    try { Breath.init(); } catch (e) { console.error('Breath.init failed', e); }
+    try { Grounding.init(); } catch (e) { console.error('Grounding.init failed', e); }
+    try { Garden.init(); } catch (e) { console.error('Garden.init failed', e); }
+    try { Sky.init(); } catch (e) { console.error('Sky.init failed', e); }
 
     // Mini-games (Tap Quiet + Paper Wind)
-    TapQuiet.init();
-    PaperWind.init();
+    try { TapQuiet.init(); } catch (e) { console.error('TapQuiet.init failed', e); }
+    try { PaperWind.init(); } catch (e) { console.error('PaperWind.init failed', e); }
 
-    Bubbles.init();
-    maybeShowNote();
-    persist();
+    try { Bubbles.init(); } catch (e) { console.error('Bubbles.init failed', e); }
+    try { maybeShowNote(); } catch (e) { console.error('maybeShowNote failed', e); }
+
+    try { persist(); } catch (e) { console.error('persist failed', e); }
   }
 
   if (document.readyState === 'loading') {
