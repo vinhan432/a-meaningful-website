@@ -19,6 +19,7 @@
   const I18N = {
     en: {
       'cover.kicker':     'a small quiet place',
+      'cover.title':      'Being Enough',
       'cover.title.l1':   'You are',
       'cover.title.l2':   'already enough.',
       'cover.sub':        "No score. No streak. No judgment. Sit down with me for a few minutes.",
@@ -211,6 +212,7 @@
 
     vi: {
       'cover.kicker':     'một nơi nhỏ và yên tĩnh',
+      'cover.title':      'Bạn đã là đủ rồi',
       'cover.title.l1':   'Bạn đã',
       'cover.title.l2':   'đủ rồi.',
       'cover.sub':        'Không điểm số. Không chuỗi ngày. Không phán xét. Ngồi xuống đây với mình vài phút nhé.',
@@ -756,6 +758,7 @@
     if (window._sky && window._sky.initialized) window._sky.render();
     if (window._breath) window._breath.refresh();
     if (window._ground) window._ground.refresh();
+    document.title = t('cover.title');
   }
 
   function applyTheme() {
@@ -1631,15 +1634,18 @@
       observer.observe(canvas);
 
       const moonBtn = document.getElementById('moon-btn');
-      moonBtn.classList.toggle('active', State.prefs.sound === 'soft');
+      if (moonBtn) moonBtn.classList.toggle('active', State.prefs.sound === 'soft');
+
       const skyClear = document.getElementById('sky-clear');
-      skyClear.addEventListener('click', () => {
-        if (!confirm(t('sky.confirm'))) return;
-        State.sky.splice(0, State.sky.length); // clear in-place
-        threads = [];
-        persist();
-        render();
-      });
+      if (skyClear) {
+        skyClear.addEventListener('click', () => {
+          if (!confirm(t('sky.confirm'))) return;
+          State.sky.splice(0, State.sky.length); // clear in-place
+          threads = [];
+          persist();
+          render();
+        });
+      }
     }
 
     function resize() {
@@ -1963,46 +1969,52 @@
 
     // VN
     const vnHost = document.getElementById('helplines-vn');
-    vnHost.innerHTML = '';
-    HELPLINES.vietnam.forEach(h => vnHost.appendChild(helplineCard(h)));
+    if (vnHost) {
+      vnHost.innerHTML = '';
+      HELPLINES.vietnam.forEach(h => vnHost.appendChild(helplineCard(h)));
+    }
 
     // Global
     const gHost = document.getElementById('helplines-global');
-    gHost.innerHTML = '';
-    HELPLINES.global
-      .filter(h => !f || (h.country + ' ' + h.name).toLowerCase().includes(f))
-      .forEach(h => {
-        const div = document.createElement('div');
-        div.className = 'help-card';
-        div.innerHTML = `
-          <div class="help-tag">${h.country}</div>
-          <div class="flex items-baseline gap-3 mt-1">
-            <span class="help-num">${h.tel}</span>
-            <span class="help-name">${h.name}</span>
-          </div>
-          <div class="help-meta">${h.langs.join(' · ')} · ${h.hours}</div>
-        `;
-        gHost.appendChild(div);
-      });
-    if (gHost.children.length === 0) {
-      gHost.innerHTML = `<p class="text-ink/50 font-serif italic col-span-2">${t('help.noMatch')}</p>`;
+    if (gHost) {
+      gHost.innerHTML = '';
+      HELPLINES.global
+        .filter(h => !f || (h.country + ' ' + h.name).toLowerCase().includes(f))
+        .forEach(h => {
+          const div = document.createElement('div');
+          div.className = 'help-card';
+          div.innerHTML = `
+            <div class="help-tag">${h.country}</div>
+            <div class="flex items-baseline gap-3 mt-1">
+              <span class="help-num">${h.tel}</span>
+              <span class="help-name">${h.name}</span>
+            </div>
+            <div class="help-meta">${h.langs.join(' · ')} · ${h.hours}</div>
+          `;
+          gHost.appendChild(div);
+        });
+      if (gHost.children.length === 0) {
+        gHost.innerHTML = `<p class="text-ink/50 font-serif italic col-span-2">${t('help.noMatch')}</p>`;
+      }
     }
 
     // Community
     const cHost = document.getElementById('helplines-community');
-    cHost.innerHTML = '';
-    HELPLINES.community.forEach(h => {
-      const div = document.createElement('div');
-      div.className = 'help-card cat-community';
-      const focus = State.user.locale === 'vi' ? h.focus_vi : h.focus_en;
-      div.innerHTML = `
-        <div class="help-tag">${t('help.tag.community')} · ${h.region}</div>
-        <div class="help-name text-lg mt-1">${h.name}</div>
-        <div class="help-meta">${focus}</div>
-        <div class="mt-2"><a href="https://${h.url}" target="_blank" rel="noopener" class="text-teal underline underline-offset-2">${h.url}</a></div>
-      `;
-      cHost.appendChild(div);
-    });
+    if (cHost) {
+      cHost.innerHTML = '';
+      HELPLINES.community.forEach(h => {
+        const div = document.createElement('div');
+        div.className = 'help-card cat-community';
+        const focus = State.user.locale === 'vi' ? h.focus_vi : h.focus_en;
+        div.innerHTML = `
+          <div class="help-tag">${t('help.tag.community')} · ${h.region}</div>
+          <div class="help-name text-lg mt-1">${h.name}</div>
+          <div class="help-meta">${focus}</div>
+          <div class="mt-2"><a href="https://${h.url}" target="_blank" rel="noopener" class="text-teal underline underline-offset-2">${h.url}</a></div>
+        `;
+        cHost.appendChild(div);
+      });
+    }
   }
 
   /* =========================================================
@@ -2032,7 +2044,25 @@
       try {
         const parsed = JSON.parse(reader.result);
         if (!parsed || parsed.v !== 2) throw new Error('bad');
-        State = parsed;
+
+        // Normalize into the current expected shape to avoid runtime crashes.
+        const def = defaultState();
+        State = {
+          ...def,
+          ...parsed,
+          user: { ...def.user, ...(parsed.user || {}) },
+          prefs: { ...def.prefs, ...(parsed.prefs || {}) },
+
+          oasis: { ...def.oasis, ...(parsed.oasis || {}) },
+          breath: { ...def.breath, ...(parsed.breath || {}) },
+          ground: { ...def.ground, ...(parsed.ground || {}) },
+
+          moods: Array.isArray(parsed.moods) ? parsed.moods.slice(-180) : def.moods,
+          garden: Array.isArray(parsed.garden) ? parsed.garden.slice(-30) : def.garden,
+          sky: Array.isArray(parsed.sky) ? parsed.sky.slice(-50) : def.sky,
+          bubblesCaught: typeof parsed.bubblesCaught === 'number' ? parsed.bubblesCaught : def.bubblesCaught
+        };
+
         persist();
         applyTheme();
         applyLocale();
@@ -2232,9 +2262,7 @@
       const diff = Math.abs(elapsedSec - targetOpenAt);
       const ok = diff < (reduce ? 0.18 : 0.22);
 
-      const status = ok
-        ? (State.user.locale === 'vi' ? 'đã chạm đúng nhịp.' : 'you touched the bloom.')
-        : (State.user.locale === 'vi' ? 'đã chạm.' : 'you touched.');
+      const status = ok ? t('tap.success') : t('tap.touched');
       setStatus(status);
 
       // Briefly pause auto reset and then restart
@@ -2508,8 +2536,8 @@
 
       pauseBtn.addEventListener('click', () => {
         paused = !paused;
-        pauseBtn.textContent = t('wind.pause');
-        setStatus(paused ? (State.user.locale === 'vi' ? 'đang tạm dừng.' : 'paused.') : t('wind.status.on'));
+        pauseBtn.textContent = paused ? t('wind.resume') : t('wind.pause');
+        setStatus(paused ? t('wind.paused') : t('wind.status.on'));
         if (!paused) startLoop();
       });
 
@@ -2584,27 +2612,33 @@
 
   function bindTopBar() {
     const localeBtn = document.getElementById('locale-toggle');
-    localeBtn.addEventListener('click', () => {
-      State.user.locale = State.user.locale === 'en' ? 'vi' : 'en';
-      persist();
-      applyLocale();
-    });
+    if (localeBtn) {
+      localeBtn.addEventListener('click', () => {
+        State.user.locale = State.user.locale === 'en' ? 'vi' : 'en';
+        persist();
+        applyLocale();
+      });
+    }
 
     const themeBtn = document.getElementById('theme-toggle');
-    themeBtn.addEventListener('click', () => {
-      State.prefs.theme = State.prefs.theme === 'wheat' ? 'night' : 'wheat';
-      persist();
-      applyTheme();
-    });
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        State.prefs.theme = State.prefs.theme === 'wheat' ? 'night' : 'wheat';
+        persist();
+        applyTheme();
+      });
+    }
 
     const moonBtn = document.getElementById('moon-btn');
-    moonBtn.addEventListener('click', () => {
-      State.prefs.sound = State.prefs.sound === 'soft' ? 'off' : 'soft';
-      persist();
-      moonBtn.classList.toggle('active', State.prefs.sound === 'soft');
-      const label = moonBtn.querySelector('span');
-      label.textContent = State.prefs.sound === 'soft' ? t('sky.silenced') : t('sky.letSing');
-    });
+    if (moonBtn) {
+      moonBtn.addEventListener('click', () => {
+        State.prefs.sound = State.prefs.sound === 'soft' ? 'off' : 'soft';
+        persist();
+        moonBtn.classList.toggle('active', State.prefs.sound === 'soft');
+        const label = moonBtn.querySelector('span');
+        if (label) label.textContent = State.prefs.sound === 'soft' ? t('sky.silenced') : t('sky.letSing');
+      });
+    }
   }
 
   function bindCover() {
