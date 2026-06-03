@@ -519,3 +519,65 @@ body.theme-night ::-webkit-scrollbar-thumb { background: rgba(232,231,210,0.15);
   .bubble { animation: none !important; }
   html { scroll-behavior: auto; }
 }
+
+/* ============================================================
+   Mini-games UI: canvas polish
+   ============================================================ */
+.tap-wrap, .wind-wrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(251,246,233,0.7), rgba(251,246,233,0.35));
+  border: 1px solid rgba(42,37,34,0.06);
+}
+body.theme-night .tap-wrap,
+body.theme-night .wind-wrap{
+  background: linear-gradient(180deg, rgba(37,35,64,0.55), rgba(37,35,64,0.28));
+  border-color: rgba(232,231,210,0.08);
+}
+
+.tap-canvas, .wind-canvas {
+  display: block;
+  width: 100%;
+  height: 260px;
+  background: transparent;
+  touch-action: manipulation; /* better mobile responsiveness */
+  cursor: default;
+}
+.tap-canvas { cursor: pointer; }
+.wind-canvas { cursor: crosshair; }
+
+.tap-canvas:focus-visible,
+.wind-canvas:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(232,184,109,0.18) inset;
+}
+
+.tap-overlay, .wind-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.mini-glow {
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(circle at 20% 20%, rgba(232,184,109,0.20), transparent 55%),
+              radial-gradient(circle at 70% 60%, rgba(127,183,176,0.18), transparent 60%);
+  opacity: 0.75;
+  pointer-events: none;
+  filter: blur(10px);
+}
+
+.mini-status-pill {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(42,37,34,0.08);
+  background: rgba(251,246,233,0.65);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 0.8rem;
+}
+body.theme-night .mini-status-pill{
+  border-color: rgba(232,231,210,0.12);
+  background: rgba(37,35,64,0.55);
+}
