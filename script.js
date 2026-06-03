@@ -194,6 +194,15 @@
       'wind.clear':       'clear pieces',
       'wind.hint':        'Hint:',
       'wind.hint2':       'hover gently; let the drift do the work.',
+      'wind.paused':      'paused.',
+      'wind.resume':      'resume',
+
+      // Tap feedback
+      'tap.success':      'you touched the bloom.',
+      'tap.touched':      'you touched.',
+
+      // Sky
+      'sky.confirm':      'Let go of your stars?',
 
       // Floating help
       'help.float':      'I need a real person',
@@ -377,6 +386,15 @@
       'wind.clear':       'xóa mảnh',
       'wind.hint':        'Gợi ý:',
       'wind.hint2':       'di nhẹ thôi; để những mảnh giấy tự trôi.',
+      'wind.paused':      'đang tạm dừng.',
+      'wind.resume':      'tiếp tục',
+
+      // Tap feedback
+      'tap.success':      'đã chạm đúng nhịp.',
+      'tap.touched':      'đã chạm.',
+
+      // Sky
+      'sky.confirm':      'Buông các ngôi sao của bạn?',
 
       // Floating help
       'help.float':        'mình cần một người thật',
