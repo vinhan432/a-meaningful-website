@@ -1634,9 +1634,8 @@
       moonBtn.classList.toggle('active', State.prefs.sound === 'soft');
       const skyClear = document.getElementById('sky-clear');
       skyClear.addEventListener('click', () => {
-        if (!confirm(State.user.locale === 'vi' ? 'Buông các ngôi sao của bạn?' : 'Let go of your stars?')) return;
-        placed = [];
-        State.sky = [];
+        if (!confirm(t('sky.confirm'))) return;
+        State.sky.splice(0, State.sky.length); // clear in-place
         threads = [];
         persist();
         render();
@@ -1664,7 +1663,7 @@
       const star = { id: 's_' + Date.now().toString(36) + Math.random().toString(36).slice(2,6), x, y, ts: Date.now() };
       placed.push(star);
       State.sky.push(star);
-      State.sky = State.sky.slice(-50);
+      if (State.sky.length > 50) State.sky.splice(0, State.sky.length - 50); // trim in-place
       persist();
       // spawn threads to 1-2 nearest stars
       const others = placed.slice(0, -1);
@@ -1828,8 +1827,8 @@
       s.releaseStart = Date.now();
       if (!rafId) start();
       setTimeout(() => {
-        placed = placed.filter(p => p.id !== id);
-        State.sky = placed.slice();
+        placed.splice(0, placed.length, ...placed.filter(p => p.id !== id)); // mutate in-place
+        State.sky.splice(0, State.sky.length, ...placed); // sync State.sky in-place
         persist();
       }, 1500);
     }
