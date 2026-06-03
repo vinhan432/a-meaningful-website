@@ -2553,7 +2553,8 @@
 
       clearBtn.addEventListener('click', () => clear());
 
-      canvas.style.touchAction = 'none';
+      // Allow taps/gestures on mobile while still getting pointer events.
+      canvas.style.touchAction = 'manipulation';
 
       // Pointer-driven wind
       canvas.addEventListener('pointermove', (ev) => {
@@ -2571,10 +2572,11 @@
 
       // Make taps spawn a soft burst too
       canvas.addEventListener('pointerdown', (ev) => {
+        if (ev.isPrimary === false) return;
         updatePointer(ev);
         spawnBurst(8);
         startLoop();
-      });
+      }, { passive: true });
     }
 
     function init() {
