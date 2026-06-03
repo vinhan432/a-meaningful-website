@@ -76,7 +76,7 @@
       'sky.title.l1':     'Constellation',
       'sky.title.l2':     'Sky',
       'sky.sub':          'Tap the dark. Place a star. They will reach toward each other. The sky is allowed to sing — only when you ask it to.',
-      'sky.letSing':      'let the sky sing',
+      'sky.singBtn':       'let the sky sing',
       'sky.silenced':     'the sky is quiet now',
       'sky.clear':        'clear my stars',
       'sky.release':      'release this star',
@@ -1624,7 +1624,12 @@
         });
       }
 
+      // Mobile support: tap/press should place stars too.
       canvas.addEventListener('click', (e) => onClick(e));
+      canvas.addEventListener('pointerdown', (e) => {
+        if (e.isPrimary === false) return;
+        onClick(e);
+      }, { passive: true });
       start();
       initialized = true;
 
@@ -2295,12 +2300,12 @@
       });
 
       const handle = (ev) => {
-        // Respect buttons/keyboard; only for touch/click/tap on canvas
-        ev.preventDefault?.();
+        // Mobile/touch: don't block scrolling globally; just react to the primary tap.
+        if (ev.isPrimary === false) return;
         onUserTap();
       };
 
-      canvas.addEventListener('pointerdown', handle, { passive: false });
+      canvas.addEventListener('pointerdown', handle, { passive: true });
 
       // Improve mobile UX: keep “tap” responsive without scrolling
       canvas.style.touchAction = 'manipulation';

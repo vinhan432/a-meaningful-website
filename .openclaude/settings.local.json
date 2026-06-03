@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(where.exe gh:*)",
+      "Read(//c/Users/Admin/AppData/Local/Programs/**)",
+      "Read(//c/Program Files/**)",
+      "Read(//c/Program Files \\(x86\\)/**)",
+      "Bash(cmd //c \"where gh\")",
+      "Bash(ls \"/c/Program Files \\(x86\\)/GitHub CLI/\")",
+      "Read(//c/Users/Admin/AppData/Local/**)",
+      "Bash(node:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ]
+  }
+}
