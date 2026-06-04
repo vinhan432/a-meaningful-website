@@ -1,6 +1,7 @@
+
 /* ============================================================
    Being Enough — custom layer
-   Animations, themes, modal, bubbles, ambient, reduced-motion
+rêm   Animations, themes, modal, bubbles, ambient, reduced-motion
    ============================================================ */
 
 :root {
@@ -11,6 +12,7 @@
   --gold:     #E8B86D;
   --teal:     #7FB7B0;
   --moss:     #8AA487;
+  
   --night:    #1B1A2E;
   --night2:   #252340;
   --ink:      #2A2522;
@@ -312,7 +314,6 @@ body.theme-night .fireflies { opacity: 1; }
 }
 .sky-whisper {
   position: absolute;
-  left: 50%; bottom: 16px;
   transform: translateX(-50%);
   font-family: 'Cormorant Garamond', Georgia, serif;
   font-style: italic;
@@ -327,9 +328,11 @@ body.theme-night .fireflies { opacity: 1; }
   text-align: center;
   opacity: 0;
   transition: opacity 600ms ease, transform 600ms ease;
+  /* allow only the internal button when visible */
   pointer-events: none;
 }
-.sky-whisper.show { opacity: 1; transform: translateX(-50%) translateY(-4px); }
+.sky-whisper.show { opacity: 1; transform: translateX(-50%) translateY(-4px); pointer-events: auto; }
+.sky-whisper .release-btn { pointer-events: auto; }
 
 .moon-btn {
   display: inline-flex; align-items: center; gap: 0.4rem;

@@ -1372,7 +1372,7 @@
 
       els.stepButtons.forEach(b => {
         const idx = parseInt(b.getAttribute('data-step'), 10); // 5..1
-        const my = parseInt(String(currentStep().key), 10);
+        const my = 5 - (Math.max(0, Math.min(4, State.ground.step || 0))); // step 0..4 => key 5..1
         b.classList.toggle('active', idx === my);
       });
 
@@ -1390,7 +1390,6 @@
         els.label.textContent = t(step.i18n);
         if (els.instructionText) els.instructionText.textContent = t(step.i18n);
       }
-      persist();
     }
 
     function setStep(stepIndex) {
@@ -1866,8 +1865,7 @@
   window._sky = Sky;
   window._breath = Breath;
   window._ground = Grounding;
-  window._tap = TapQuiet;
-  window._wind = PaperWind;
+  // TapQuiet / PaperWind exposed at end of file after declaration (avoid TDZ)
 
   /* =========================================================
      9. BUBBLE FIELD
@@ -2778,4 +2776,8 @@
   } else {
     boot();
   }
+// expose mini-game modules (after declaration, avoid TDZ)
+  try { window._tap = TapQuiet; } catch(_){}
+  try { window._wind = PaperWind; } catch(_){}
+
 })();
