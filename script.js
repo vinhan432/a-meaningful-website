@@ -1633,8 +1633,8 @@
         });
       }
 
-      // Mobile support: tap/press should place stars too.
-      canvas.addEventListener('click', (e) => onClick(e));
+      // Mobile support: use pointerdown (fires on touch + mouse, supersedes click).
+      // click removed — pointerdown already handles all input; double-fire on mobile tap would double-place stars.
       canvas.addEventListener('pointerdown', (e) => {
         if (e.isPrimary === false) return;
         onClick(e);
@@ -1698,12 +1698,18 @@
 
     function showWhisper(star) {
       const el = document.getElementById('sky-whisper');
-      const idx = State.sky.findIndex(s => s.id === star.id);
+      if (!el) return;
+
       const dict = WHISPERS[State.user.locale] || WHISPERS.en;
-      const msg = dict.starMessages[idx % dict.starMessages.length];
+
+      const idx = State.sky.findIndex(s => s.id === star.id);
+      const safeIdx = idx >= 0 ? idx : 0; // guard: idx === -1 can happen during release/prune timing
+      const msg = dict.starMessages[safeIdx % dict.starMessages.length];
+
       const releaseLabel = t('sky.release');
       el.innerHTML = `<span>${msg}</span> <button class="release-btn" data-id="${star.id}">${releaseLabel}</button>`;
       el.classList.add('show');
+
       clearTimeout(showWhisper._t);
       const btn = el.querySelector('.release-btn');
       if (btn) {
