@@ -44,7 +44,7 @@
       'mood.soft':        'soft',
       'mood.tender':      'tender',
       'mood.quiet':       'quiet',
-      'mood.noteLabel':   'A small note (optional, 140 characters)',
+      'mood.noteLabel':   'A small note (optional)',
       'mood.notePh':      'say it in a whisper...',
       'mood.save':        'save & rest',
       'mood.cancel':      'not now',
@@ -237,7 +237,7 @@
       'mood.soft':        'dịu',
       'mood.tender':      'mong manh',
       'mood.quiet':       'tĩnh lặng',
-      'mood.noteLabel':   'Vài lời nhỏ (không bắt buộc, 140 chữ)',
+      'mood.noteLabel':   'Vài lời nhỏ (không bắt buộc)',
       'mood.notePh':      'kể thì thầm đi...',
       'mood.save':        'lưu & nghỉ',
       'mood.cancel':      'để sau',
@@ -1024,7 +1024,13 @@
   function bindMood() {
     const save = document.getElementById('mood-save');
     const cancel = document.getElementById('mood-cancel');
-    if (!save) return;
+    const input = document.getElementById('mood-note');
+    const count = document.getElementById('mood-count');
+    if (!save || !input || !count) return;
+
+    input.addEventListener('input', () => {
+      count.textContent = input.value.length;
+    });
 
     function maybeOpenSafetyForMood(label) {
       if (!SAFETY_MOODS.has(label)) return;
@@ -1059,7 +1065,8 @@
       ack.classList.remove('hidden');
 
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      input.value = '';
+      count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
 
       setTimeout(() => { ack.classList.add('hidden'); }, 5000);
@@ -1067,7 +1074,8 @@
 
     cancel.addEventListener('click', () => {
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      input.value = '';
+      count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
     });
   }
