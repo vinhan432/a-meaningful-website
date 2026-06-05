@@ -581,3 +581,15 @@ body.theme-night .mini-status-pill{
   border-color: rgba(232,231,210,0.12);
   background: rgba(37,35,64,0.55);
 }
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
