@@ -60,12 +60,12 @@
       being&nbsp;enough<span class="text-gold">.</span>
     </a>
     <div class="flex items-center gap-2">
-      <button id="locale-toggle" class="locale-pill" aria-label="Switch language">
+      <button id="locale-toggle" class="locale-pill" aria-label="Switch language" data-i18n-aria="aria.switchLang">
         <span class="locale-label" data-locale="en">EN</span>
         <span class="locale-divider">/</span>
         <span class="locale-label" data-locale="vi">VI</span>
       </button>
-      <button id="theme-toggle" class="theme-pill" aria-label="Switch theme">
+      <button id="theme-toggle" class="theme-pill" aria-label="Switch theme" data-i18n-aria="aria.switchTheme">
         <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
       </button>
     </div>
@@ -87,7 +87,7 @@
 
       <div class="col-span-12 sm:col-span-5 sm:col-start-8">
         <div class="polaroid p-6 bg-paper/90">
-          <label class="block text-sm text-ink/60 mb-2 font-serif italic" data-i18n="cover.nameLabel">What should I call you?</label>
+          <label for="name-input" class="block text-sm text-ink/60 mb-2 font-serif italic" data-i18n="cover.nameLabel">What should I call you?</label>
           <input id="name-input" type="text" maxlength="32"
                  class="w-full bg-transparent border-b border-ink/20 focus:border-gold outline-none py-2 text-lg font-serif text-ink placeholder:text-ink/30"
                  data-i18n-ph="cover.namePh" placeholder="a name, or leave blank" />
@@ -126,7 +126,7 @@
         </div>
 
         <div id="mood-note-wrap" class="hidden max-w-xl">
-          <label class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="mood.noteLabel">A small note (optional, 140 characters)</label>
+          <label for="mood-note" class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="mood.noteLabel">A small note (optional, 140 characters)</label>
           <textarea id="mood-note" maxlength="140" rows="2"
                     class="w-full bg-paper/80 border border-ink/10 focus:border-gold outline-none rounded-md p-3 font-serif text-ink placeholder:text-ink/30"
                     data-i18n-ph="mood.notePh" placeholder="say it in a whisper..."></textarea>
@@ -346,7 +346,7 @@
           <p class="font-serif italic mt-3 text-ink/70" data-i18n="oasis.lamp.label">desk lamp</p>
           <div class="flex items-center gap-2 mt-2">
             <button id="lamp-btn" class="btn-ghost" data-i18n="oasis.lamp.btn">toggle</button>
-            <input id="lamp-warmth" type="range" min="30" max="100" value="60" class="warmth-slider" aria-label="lamp warmth" />
+            <input id="lamp-warmth" type="range" min="30" max="100" value="60" class="warmth-slider" aria-label="lamp warmth" data-i18n-aria="oasis.lamp.warmth" />
           </div>
         </div>
       </div>
@@ -368,12 +368,13 @@
       </div>
       <div class="col-span-12 sm:col-span-5 sm:col-start-8">
         <div class="polaroid p-5 bg-paper/90">
-          <label class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="garden.label">A worry (or a thought)</label>
+          <label for="garden-input" class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="garden.label">A worry (or a thought)</label>
           <textarea id="garden-input" maxlength="140" rows="2"
                     class="w-full bg-transparent border-b border-ink/15 focus:border-gold outline-none resize-none py-1 font-serif text-ink placeholder:text-ink/30"
-                    data-i18n-ph="garden.ph" placeholder="what's sitting on your chest..."></textarea>
+                    data-i18n-ph="garden.ph" placeholder="what's sitting on your chest..."
+                    aria-describedby="garden-count-msg"></textarea>
           <div class="flex items-center justify-between mt-3">
-            <span class="text-xs text-ink/40"><span id="garden-count">0</span>/140</span>
+            <span id="garden-count-msg" class="text-xs text-ink/40"><span id="garden-count">0</span>/140</span>
             <button id="garden-submit" class="btn-primary" data-i18n="garden.plant">plant it</button>
           </div>
         </div>
@@ -399,7 +400,7 @@
           Tap the dark. Place a star. They will reach toward each other. The sky is allowed to sing — only when you ask it to.
         </p>
         <div class="mt-5 flex flex-wrap items-center gap-3">
-          <button id="moon-btn" class="moon-btn" aria-label="toggle sky sound">
+          <button id="moon-btn" class="moon-btn" aria-label="toggle sky sound" data-i18n-aria="aria.toggleSky">
             <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
             <span data-i18n="sky.letSing">let the sky sing</span>
           </button>
@@ -520,10 +521,12 @@
       </h3>
       <div class="polaroid p-5 sm:p-6 bg-paper/90">
         <div class="flex flex-col sm:flex-row gap-3 sm:items-center mb-5">
+          <label for="helpline-search" class="sr-only" data-i18n="help.searchLabel">Search helplines</label>
           <input id="helpline-search" type="text"
                  class="flex-1 bg-transparent border-b border-ink/15 focus:border-gold outline-none py-2 font-serif text-ink placeholder:text-ink/30"
-                 data-i18n-ph="help.searchPh" placeholder="a country or a word..." />
-          <p class="text-xs text-ink/45 font-serif italic" data-i18n="help.searchHint">type to filter</p>
+                 data-i18n-ph="help.searchPh" placeholder="a country or a word..."
+                 aria-describedby="help-search-hint" />
+          <p id="help-search-hint" class="text-xs text-ink/45 font-serif italic" data-i18n="help.searchHint">type to filter</p>
         </div>
         <div id="helplines-global" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[420px] overflow-y-auto pr-2"></div>
         <p class="text-xs text-ink/45 mt-3 font-serif italic" data-i18n="help.globalSrc">Sourced from open directories. Numbers are shown for you to dial.</p>

@@ -62,6 +62,7 @@
       'oasis.plant.watered': 'watered. it grew a little.',
       'oasis.lamp.label': 'desk lamp',
       'oasis.lamp.btn':   'toggle',
+      'oasis.lamp.warmth':'lamp warmth',
 
       'garden.eyebrow':   'plant a worry',
       'garden.title.l1':  'Word',
@@ -89,6 +90,7 @@
       'help.global':      'Find a helpline, anywhere',
       'help.searchPh':    'a country or a word...',
       'help.searchHint':  'type to filter',
+      'help.searchLabel': 'Search helplines',
       'help.globalSrc':   'Sourced from open directories. Numbers are shown for you to dial.',
       'help.community':   'Community & peer projects',
       'help.tag.emergency':  'emergency',
@@ -205,6 +207,11 @@
       // Sky
       'sky.confirm':      'Let go of your stars?',
 
+      // ARIA labels
+      'aria.switchLang':  'Switch language',
+      'aria.switchTheme': 'Switch theme',
+      'aria.toggleSky':   'toggle sky sound',
+
       // Floating help
       'help.float':      'I need a real person',
       'help.noMatch':     'no matches. try a different word.'
@@ -255,6 +262,7 @@
       'oasis.plant.watered': 'đã tưới. cây lớn thêm một chút.',
       'oasis.lamp.label': 'đèn bàn',
       'oasis.lamp.btn':   'bật/tắt',
+      'oasis.lamp.warmth':'độ ấm của đèn',
 
       'garden.eyebrow':   'trồng một lo lắng',
       'garden.title.l1':  'Vườn',
@@ -282,6 +290,7 @@
       'help.global':      'Tìm đường dây hỗ trợ, ở bất kỳ đâu',
       'help.searchPh':    'một nước hoặc một từ...',
       'help.searchHint':  'gõ để lọc',
+      'help.searchLabel': 'Tìm kiếm đường dây hỗ trợ',
       'help.globalSrc':   'Lấy từ các thư mục mở. Số để bạn tự bấm.',
       'help.community':   'Cộng đồng & dự án đồng đẳng',
       'help.tag.emergency':  'khẩn cấp',
@@ -397,6 +406,11 @@
 
       // Sky
       'sky.confirm':      'Buông các ngôi sao của bạn?',
+
+      // ARIA labels
+      'aria.switchLang':  'Thay đổi ngôn ngữ',
+      'aria.switchTheme': 'Thay đổi chủ đề',
+      'aria.toggleSky':   'bật/tắt âm thanh bầu trời',
 
       // Floating help
       'help.float':        'mình cần một người thật',
@@ -748,6 +762,9 @@
     });
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {
       el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+      el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
     });
     document.querySelectorAll('.locale-label').forEach(el => {
       el.classList.toggle('active', el.getAttribute('data-locale') === State.user.locale);
