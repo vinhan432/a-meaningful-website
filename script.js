@@ -1024,7 +1024,15 @@
   function bindMood() {
     const save = document.getElementById('mood-save');
     const cancel = document.getElementById('mood-cancel');
+    const note = document.getElementById('mood-note');
+    const count = document.getElementById('mood-count');
     if (!save) return;
+
+    if (note && count) {
+      note.addEventListener('input', () => {
+        count.textContent = note.value.length;
+      });
+    }
 
     function maybeOpenSafetyForMood(label) {
       if (!SAFETY_MOODS.has(label)) return;
@@ -1038,7 +1046,7 @@
       const sel = document.querySelector('.mood-chip.selected');
       if (!sel) return;
       const label = sel.dataset.mood;
-      const note = (document.getElementById('mood-note').value || '').trim().slice(0, 140);
+      const noteVal = (note.value || '').trim().slice(0, 140);
       const intensity = label === 'heavy' || label === 'scattered' ? 4 : (label === 'tender' ? 2 : 2);
 
       // Soft safety interstitial on heavy/scattered.
@@ -1049,7 +1057,7 @@
         ts: Date.now(),
         label,
         intensity,
-        note
+        note: noteVal
       });
       State.moods = State.moods.slice(-180);
       persist();
@@ -1059,7 +1067,8 @@
       ack.classList.remove('hidden');
 
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      note.value = '';
+      if (count) count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
 
       setTimeout(() => { ack.classList.add('hidden'); }, 5000);
@@ -1067,7 +1076,8 @@
 
     cancel.addEventListener('click', () => {
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      note.value = '';
+      if (count) count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
     });
   }
