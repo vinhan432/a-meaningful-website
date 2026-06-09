@@ -87,7 +87,7 @@
 
       <div class="col-span-12 sm:col-span-5 sm:col-start-8">
         <div class="polaroid p-6 bg-paper/90">
-          <label class="block text-sm text-ink/60 mb-2 font-serif italic" data-i18n="cover.nameLabel">What should I call you?</label>
+          <label for="name-input" class="block text-sm text-ink/60 mb-2 font-serif italic" data-i18n="cover.nameLabel">What should I call you?</label>
           <input id="name-input" type="text" maxlength="32"
                  class="w-full bg-transparent border-b border-ink/20 focus:border-gold outline-none py-2 text-lg font-serif text-ink placeholder:text-ink/30"
                  data-i18n-ph="cover.namePh" placeholder="a name, or leave blank" />
@@ -95,7 +95,7 @@
             <button id="begin-btn" class="btn-primary" data-i18n="cover.begin">begin softly</button>
             <button id="begin-skip" class="btn-ghost" data-i18n="cover.skip">skip</button>
           </div>
-          <p class="mt-4 text-xs text-ink/45 leading-relaxed" data-i18n="cover.note">
+          <p class="mt-4 text-xs text-ink/70 leading-relaxed" data-i18n="cover.note">
             This stays on your device. No account. No cloud. You can clear it any time.
           </p>
         </div>
@@ -126,13 +126,19 @@
         </div>
 
         <div id="mood-note-wrap" class="hidden max-w-xl">
-          <label class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="mood.noteLabel">A small note (optional, 140 characters)</label>
+          <label for="mood-note" class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="mood.noteLabel">A small note (optional, 140 characters)</label>
           <textarea id="mood-note" maxlength="140" rows="2"
+                    aria-describedby="mood-msg"
                     class="w-full bg-paper/80 border border-ink/10 focus:border-gold outline-none rounded-md p-3 font-serif text-ink placeholder:text-ink/30"
                     data-i18n-ph="mood.notePh" placeholder="say it in a whisper..."></textarea>
-          <div class="flex items-center gap-3 mt-3">
-            <button id="mood-save" class="btn-primary" data-i18n="mood.save">save & rest</button>
-            <button id="mood-cancel" class="btn-ghost" data-i18n="mood.cancel">not now</button>
+          <div class="flex items-center justify-between mt-3">
+            <div id="mood-msg" class="text-xs text-ink/70" aria-live="polite">
+              <span id="mood-count">0</span>/140
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="mood-save" class="btn-primary" data-i18n="mood.save">save & rest</button>
+              <button id="mood-cancel" class="btn-ghost" data-i18n="mood.cancel">not now</button>
+            </div>
           </div>
         </div>
 
@@ -174,7 +180,7 @@
               <button id="breath-reset" class="btn-ghost" type="button" data-i18n="breath.resetLabel">reset</button>
             </div>
 
-            <p class="text-xs text-ink/45 font-serif italic" id="breath-status" data-i18n="breath.notRunning">
+            <p class="text-xs text-ink/70 font-serif italic" id="breath-status" data-i18n="breath.notRunning">
               Not running.
             </p>
           </div>
@@ -187,7 +193,7 @@
         <div>
           <p class="text-sm text-ink/50 font-serif italic" data-i18n="breath.cycleLabel">cycle</p>
           <div class="font-serif text-4xl sm:text-5xl text-ink/90">
-            <span id="breath-cycles">0</span><span class="text-ink/40 text-lg"> </span><span id="breath-cycle-sub" class="text-ink/40 text-lg"></span>
+            <span id="breath-cycles">0</span><span class="text-ink/70 text-lg"> </span><span id="breath-cycle-sub" class="text-ink/70 text-lg"></span>
           </div>
         </div>
 
@@ -208,7 +214,7 @@
         </div>
       </div>
 
-      <p class="mt-4 text-xs text-ink/45 font-serif italic" data-i18n="breath.disclaimer">
+      <p class="mt-4 text-xs text-ink/70 font-serif italic" data-i18n="breath.disclaimer">
         If you feel dizzy or uncomfortable, stop. Your nervous system deserves gentleness.
       </p>
     </div>
@@ -244,7 +250,7 @@
           </div>
 
           <div class="mt-4">
-            <p class="text-xs text-ink/45 font-serif italic" id="ground-instructions">
+            <p class="text-xs text-ink/70 font-serif italic" id="ground-instructions">
               <span id="ground-instruction-text" data-i18n="ground.5">Find 5 things you can see.</span>
             </p>
 
@@ -327,7 +333,7 @@
           </div>
           <p class="font-serif italic mt-3 text-ink/70">
             <span data-i18n="oasis.plant.label">desk plant</span>
-            <span class="text-ink/40"> · <span id="plant-growth-num">0</span>%</span>
+            <span class="text-ink/70"> · <span id="plant-growth-num">0</span>%</span>
           </p>
           <button id="plant-btn" class="btn-ghost mt-2" data-i18n="oasis.plant.btn">water it</button>
         </div>
@@ -368,12 +374,15 @@
       </div>
       <div class="col-span-12 sm:col-span-5 sm:col-start-8">
         <div class="polaroid p-5 bg-paper/90">
-          <label class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="garden.label">A worry (or a thought)</label>
+          <label for="garden-input" class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="garden.label">A worry (or a thought)</label>
           <textarea id="garden-input" maxlength="140" rows="2"
+                    aria-describedby="garden-msg"
                     class="w-full bg-transparent border-b border-ink/15 focus:border-gold outline-none resize-none py-1 font-serif text-ink placeholder:text-ink/30"
                     data-i18n-ph="garden.ph" placeholder="what's sitting on your chest..."></textarea>
           <div class="flex items-center justify-between mt-3">
-            <span class="text-xs text-ink/40"><span id="garden-count">0</span>/140</span>
+            <div id="garden-msg" class="text-xs text-ink/70" aria-live="polite">
+              <span id="garden-count">0</span>/140
+            </div>
             <button id="garden-submit" class="btn-primary" data-i18n="garden.plant">plant it</button>
           </div>
         </div>
@@ -383,7 +392,7 @@
     <div id="garden-frame" class="polaroid bg-paper/70 p-3 sm:p-5 overflow-hidden">
       <canvas id="garden-canvas" class="w-full block" style="height: 360px;"></canvas>
     </div>
-    <p class="text-xs text-ink/45 mt-2 font-serif italic" data-i18n="garden.footer">Branches grow slowly. Sit with one. There is no rush.</p>
+    <p class="text-xs text-ink/70 mt-2 font-serif italic" data-i18n="garden.footer">Branches grow slowly. Sit with one. There is no rush.</p>
   </section>
 
   <!-- ============== 6. CONSTELLATION SKY ============== -->
@@ -440,7 +449,7 @@
               <p class="text-ink/65 text-sm leading-relaxed" data-i18n="tap.sub">Tap the “flower” when it opens. No streak. Just timing.</p>
             </div>
             <div class="text-right">
-              <p class="text-xs text-ink/45 font-serif italic" data-i18n="tap.statusLabel">status</p>
+              <p class="text-xs text-ink/70 font-serif italic" data-i18n="tap.statusLabel">status</p>
               <p id="tap-status" class="font-serif text-ink/80 text-sm" aria-live="polite" data-i18n="tap.status.idle">waiting...</p>
             </div>
           </div>
@@ -451,7 +460,7 @@
               <button id="tap-toggle" class="btn-primary" type="button" data-i18n="tap.start">start gently</button>
               <button id="tap-reset" class="btn-ghost" type="button" data-i18n="tap.reset">reset</button>
             </div>
-            <div class="mt-3 text-xs text-ink/45 font-serif italic">
+            <div class="mt-3 text-xs text-ink/70 font-serif italic">
               <span data-i18n="tap.hint">Tip:</span> <span data-i18n="tap.hint2">slow taps are the right taps.</span>
             </div>
           </div>
@@ -468,7 +477,7 @@
               <p class="text-ink/65 text-sm leading-relaxed" data-i18n="wind.sub">Move your pointer and watch soft paper pieces drift.</p>
             </div>
             <div class="text-right">
-              <p class="text-xs text-ink/45 font-serif italic" data-i18n="wind.statusLabel">status</p>
+              <p class="text-xs text-ink/70 font-serif italic" data-i18n="wind.statusLabel">status</p>
               <p id="wind-status" class="font-serif text-ink/80 text-sm" aria-live="polite" data-i18n="wind.status.on">ready</p>
             </div>
           </div>
@@ -479,7 +488,7 @@
               <button id="wind-pause" class="btn-ghost" type="button" data-i18n="wind.pause">pause motion</button>
               <button id="wind-clear" class="btn-ghost" type="button" data-i18n="wind.clear">clear pieces</button>
             </div>
-            <div class="mt-3 text-xs text-ink/45 font-serif italic">
+            <div class="mt-3 text-xs text-ink/70 font-serif italic">
               <span data-i18n="wind.hint">Hint:</span> <span data-i18n="wind.hint2">hover gently; let the drift do the work.</span>
             </div>
           </div>
@@ -521,12 +530,13 @@
       <div class="polaroid p-5 sm:p-6 bg-paper/90">
         <div class="flex flex-col sm:flex-row gap-3 sm:items-center mb-5">
           <input id="helpline-search" type="text"
+                 data-i18n-aria="help.searchLabel"
                  class="flex-1 bg-transparent border-b border-ink/15 focus:border-gold outline-none py-2 font-serif text-ink placeholder:text-ink/30"
                  data-i18n-ph="help.searchPh" placeholder="a country or a word..." />
-          <p class="text-xs text-ink/45 font-serif italic" data-i18n="help.searchHint">type to filter</p>
+          <p class="text-xs text-ink/70 font-serif italic" data-i18n="help.searchHint">type to filter</p>
         </div>
         <div id="helplines-global" class="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[420px] overflow-y-auto pr-2"></div>
-        <p class="text-xs text-ink/45 mt-3 font-serif italic" data-i18n="help.globalSrc">Sourced from open directories. Numbers are shown for you to dial.</p>
+        <p class="text-xs text-ink/70 mt-3 font-serif italic" data-i18n="help.globalSrc">Sourced from open directories. Numbers are shown for you to dial.</p>
       </div>
     </div>
 
@@ -554,7 +564,7 @@
         <p id="safety-copy" data-i18n="safety.copy">
           If you might hurt yourself, or you feel in immediate danger, please talk to a real person right now.
         </p>
-        <p class="text-xs text-ink/45 font-serif italic" id="safety-subcopy" data-i18n="safety.subcopy">
+        <p class="text-xs text-ink/70 font-serif italic" id="safety-subcopy" data-i18n="safety.subcopy">
           This page stays offline and does not place phone links. Numbers are shown for you to dial.
         </p>
 
@@ -593,7 +603,7 @@
         <button id="reset-profile" class="btn-ghost text-left text-rose/80" data-i18n="foot.reset">let it go (reset everything)</button>
       </div>
     </div>
-    <div class="mt-12 pt-6 border-t border-ink/10 text-xs text-ink/45 font-serif italic">
+    <div class="mt-12 pt-6 border-t border-ink/10 text-xs text-ink/70 font-serif italic">
       <span data-i18n="foot.credit">Made with care. No cookies. No trackers. No backend. Made for slow, ordinary hard days.</span>
     </div>
   </footer>

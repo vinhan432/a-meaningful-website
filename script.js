@@ -87,6 +87,7 @@
       'help.sub':         'These are real people who pick up. We do not put phone numbers into links — you dial them yourself, when you decide. That is your hand to hold first.',
       'help.vn':          'Vietnam',
       'help.global':      'Find a helpline, anywhere',
+      'help.searchLabel': 'Search helplines by country or keyword',
       'help.searchPh':    'a country or a word...',
       'help.searchHint':  'type to filter',
       'help.globalSrc':   'Sourced from open directories. Numbers are shown for you to dial.',
@@ -280,6 +281,7 @@
       'help.sub':         'Đây là những người thật, họ nghe máy. Mình không gài số điện thoại vào đường link — bạn tự bấm, khi bạn sẵn sàng. Bàn tay bạn nắm trước đã.',
       'help.vn':          'Việt Nam',
       'help.global':      'Tìm đường dây hỗ trợ, ở bất kỳ đâu',
+      'help.searchLabel': 'Tìm kiếm đường dây hỗ trợ theo quốc gia hoặc từ khóa',
       'help.searchPh':    'một nước hoặc một từ...',
       'help.searchHint':  'gõ để lọc',
       'help.globalSrc':   'Lấy từ các thư mục mở. Số để bạn tự bấm.',
@@ -749,6 +751,9 @@
     document.querySelectorAll('[data-i18n-ph]').forEach(el => {
       el.setAttribute('placeholder', t(el.getAttribute('data-i18n-ph')));
     });
+    document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+      el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria')));
+    });
     document.querySelectorAll('.locale-label').forEach(el => {
       el.classList.toggle('active', el.getAttribute('data-locale') === State.user.locale);
     });
@@ -1024,7 +1029,16 @@
   function bindMood() {
     const save = document.getElementById('mood-save');
     const cancel = document.getElementById('mood-cancel');
+    const noteInput = document.getElementById('mood-note');
+    const countEl = document.getElementById('mood-count');
+
     if (!save) return;
+
+    if (noteInput && countEl) {
+      noteInput.addEventListener('input', () => {
+        countEl.textContent = noteInput.value.length;
+      });
+    }
 
     function maybeOpenSafetyForMood(label) {
       if (!SAFETY_MOODS.has(label)) return;
@@ -1060,6 +1074,7 @@
 
       document.getElementById('mood-note-wrap').classList.add('hidden');
       document.getElementById('mood-note').value = '';
+      if (countEl) countEl.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
 
       setTimeout(() => { ack.classList.add('hidden'); }, 5000);
@@ -1068,6 +1083,7 @@
     cancel.addEventListener('click', () => {
       document.getElementById('mood-note-wrap').classList.add('hidden');
       document.getElementById('mood-note').value = '';
+      if (countEl) countEl.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
     });
   }
