@@ -399,9 +399,9 @@ body.theme-night .help-card .help-num { color: #F4ECD8; }
   user-select: none;
 }
 .mood-chip:hover { background: var(--gold); color: var(--paper); border-color: var(--gold); transform: translateY(-1px); }
-.mood-chip.selected { background: var(--teal); color: var(--paper); border-color: var(--teal); }
+.mood-chip.selected, .breath-preset.selected { background: var(--teal); color: var(--paper); border-color: var(--teal); }
 body.theme-night .mood-chip { background: rgba(37,35,64,0.5); color: #E8E3D2; border-color: rgba(232,231,210,0.1); }
-body.theme-night .mood-chip:hover, body.theme-night .mood-chip.selected { background: var(--teal); color: var(--night); border-color: var(--teal); }
+body.theme-night .mood-chip:hover, body.theme-night .mood-chip.selected, body.theme-night .breath-preset.selected { background: var(--teal); color: var(--night); border-color: var(--teal); }
 
 /* ============== BUBBLE FIELD ============== */
 .bubble-field {

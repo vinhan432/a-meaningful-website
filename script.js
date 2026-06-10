@@ -1024,7 +1024,13 @@
   function bindMood() {
     const save = document.getElementById('mood-save');
     const cancel = document.getElementById('mood-cancel');
+    const note = document.getElementById('mood-note');
+    const count = document.getElementById('mood-count');
     if (!save) return;
+
+    note.addEventListener('input', () => {
+      if (count) count.textContent = note.value.length;
+    });
 
     function maybeOpenSafetyForMood(label) {
       if (!SAFETY_MOODS.has(label)) return;
@@ -1038,7 +1044,7 @@
       const sel = document.querySelector('.mood-chip.selected');
       if (!sel) return;
       const label = sel.dataset.mood;
-      const note = (document.getElementById('mood-note').value || '').trim().slice(0, 140);
+      const noteContent = (note.value || '').trim().slice(0, 140);
       const intensity = label === 'heavy' || label === 'scattered' ? 4 : (label === 'tender' ? 2 : 2);
 
       // Soft safety interstitial on heavy/scattered.
@@ -1049,7 +1055,7 @@
         ts: Date.now(),
         label,
         intensity,
-        note
+        note: noteContent
       });
       State.moods = State.moods.slice(-180);
       persist();
@@ -1059,7 +1065,8 @@
       ack.classList.remove('hidden');
 
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      note.value = '';
+      if (count) count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
 
       setTimeout(() => { ack.classList.add('hidden'); }, 5000);
@@ -1067,7 +1074,8 @@
 
     cancel.addEventListener('click', () => {
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      note.value = '';
+      if (count) count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
     });
   }
@@ -1238,7 +1246,8 @@
         phaseText: document.getElementById('breath-phase'),
         phaseSub: document.getElementById('breath-cycle-sub'),
         ringProgress: document.querySelector('.breath-ring-progress'),
-        ringInner: document.querySelector('.breath-ring-inner')
+        ringInner: document.querySelector('.breath-ring-inner'),
+        presetLabel: document.getElementById('breath-preset-label')
       };
 
       if (!els.toggle || !els.reset || !els.phaseText || !els.ringProgress) return;
@@ -1246,7 +1255,11 @@
       // preset highlight
       els.presetButtons.forEach(btn => {
         const k = btn.getAttribute('data-preset');
-        btn.classList.toggle('selected', k === State.breath.presetKey);
+        const isSel = k === State.breath.presetKey;
+        btn.classList.toggle('selected', isSel);
+        if (isSel && els.presetLabel) {
+          els.presetLabel.textContent = btn.getAttribute('data-label') || k;
+        }
       });
 
       els.toggle.textContent = State.breath.running ? t('breath.stop') : t('breath.start');
