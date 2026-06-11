@@ -87,7 +87,7 @@
 
       <div class="col-span-12 sm:col-span-5 sm:col-start-8">
         <div class="polaroid p-6 bg-paper/90">
-          <label class="block text-sm text-ink/60 mb-2 font-serif italic" data-i18n="cover.nameLabel">What should I call you?</label>
+          <label for="name-input" class="block text-sm text-ink/60 mb-2 font-serif italic" data-i18n="cover.nameLabel">What should I call you?</label>
           <input id="name-input" type="text" maxlength="32"
                  class="w-full bg-transparent border-b border-ink/20 focus:border-gold outline-none py-2 text-lg font-serif text-ink placeholder:text-ink/30"
                  data-i18n-ph="cover.namePh" placeholder="a name, or leave blank" />
@@ -126,10 +126,16 @@
         </div>
 
         <div id="mood-note-wrap" class="hidden max-w-xl">
-          <label class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="mood.noteLabel">A small note (optional, 140 characters)</label>
+          <label for="mood-note" class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="mood.noteLabel">A small note (optional, 140 characters)</label>
           <textarea id="mood-note" maxlength="140" rows="2"
                     class="w-full bg-paper/80 border border-ink/10 focus:border-gold outline-none rounded-md p-3 font-serif text-ink placeholder:text-ink/30"
-                    data-i18n-ph="mood.notePh" placeholder="say it in a whisper..."></textarea>
+                    data-i18n-ph="mood.notePh" placeholder="say it in a whisper..."
+                    aria-describedby="mood-count-wrap"></textarea>
+          <div class="flex justify-end mt-1">
+            <span class="text-xs text-ink/70" id="mood-count-wrap" aria-live="polite">
+              <span id="mood-count">0</span>/140
+            </span>
+          </div>
           <div class="flex items-center gap-3 mt-3">
             <button id="mood-save" class="btn-primary" data-i18n="mood.save">save & rest</button>
             <button id="mood-cancel" class="btn-ghost" data-i18n="mood.cancel">not now</button>
@@ -368,12 +374,15 @@
       </div>
       <div class="col-span-12 sm:col-span-5 sm:col-start-8">
         <div class="polaroid p-5 bg-paper/90">
-          <label class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="garden.label">A worry (or a thought)</label>
+          <label for="garden-input" class="block text-sm text-ink/55 mb-2 font-serif italic" data-i18n="garden.label">A worry (or a thought)</label>
           <textarea id="garden-input" maxlength="140" rows="2"
                     class="w-full bg-transparent border-b border-ink/15 focus:border-gold outline-none resize-none py-1 font-serif text-ink placeholder:text-ink/30"
-                    data-i18n-ph="garden.ph" placeholder="what's sitting on your chest..."></textarea>
+                    data-i18n-ph="garden.ph" placeholder="what's sitting on your chest..."
+                    aria-describedby="garden-count-wrap"></textarea>
           <div class="flex items-center justify-between mt-3">
-            <span class="text-xs text-ink/40"><span id="garden-count">0</span>/140</span>
+            <span class="text-xs text-ink/70" id="garden-count-wrap" aria-live="polite">
+              <span id="garden-count">0</span>/140
+            </span>
             <button id="garden-submit" class="btn-primary" data-i18n="garden.plant">plant it</button>
           </div>
         </div>
