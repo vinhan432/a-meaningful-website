@@ -1024,7 +1024,13 @@
   function bindMood() {
     const save = document.getElementById('mood-save');
     const cancel = document.getElementById('mood-cancel');
-    if (!save) return;
+    const note = document.getElementById('mood-note');
+    const count = document.getElementById('mood-count');
+    if (!save || !note || !count) return;
+
+    note.addEventListener('input', () => {
+      count.textContent = note.value.length;
+    });
 
     function maybeOpenSafetyForMood(label) {
       if (!SAFETY_MOODS.has(label)) return;
@@ -1059,7 +1065,8 @@
       ack.classList.remove('hidden');
 
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      note.value = '';
+      count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
 
       setTimeout(() => { ack.classList.add('hidden'); }, 5000);
@@ -1067,7 +1074,8 @@
 
     cancel.addEventListener('click', () => {
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      note.value = '';
+      count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
     });
   }
@@ -1233,6 +1241,7 @@
         toggle: document.getElementById('breath-toggle'),
         reset: document.getElementById('breath-reset'),
         presetButtons: Array.from(document.querySelectorAll('.breath-preset[data-preset]')),
+        presetLabel: document.getElementById('breath-preset-label'),
         status: document.getElementById('breath-status'),
         cycles: document.getElementById('breath-cycles'),
         phaseText: document.getElementById('breath-phase'),
@@ -1246,7 +1255,11 @@
       // preset highlight
       els.presetButtons.forEach(btn => {
         const k = btn.getAttribute('data-preset');
-        btn.classList.toggle('selected', k === State.breath.presetKey);
+        const isSelected = k === State.breath.presetKey;
+        btn.classList.toggle('selected', isSelected);
+        if (isSelected && els.presetLabel) {
+          els.presetLabel.textContent = btn.getAttribute('data-label') || k.split('').join('–');
+        }
       });
 
       els.toggle.textContent = State.breath.running ? t('breath.stop') : t('breath.start');
