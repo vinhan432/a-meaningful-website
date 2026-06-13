@@ -1022,9 +1022,15 @@
   }
 
   function bindMood() {
+    const note = document.getElementById('mood-note');
+    const count = document.getElementById('mood-count');
     const save = document.getElementById('mood-save');
     const cancel = document.getElementById('mood-cancel');
-    if (!save) return;
+    if (!save || !note || !count) return;
+
+    note.addEventListener('input', () => {
+      count.textContent = note.value.length;
+    });
 
     function maybeOpenSafetyForMood(label) {
       if (!SAFETY_MOODS.has(label)) return;
@@ -1059,7 +1065,8 @@
       ack.classList.remove('hidden');
 
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      note.value = '';
+      count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
 
       setTimeout(() => { ack.classList.add('hidden'); }, 5000);
@@ -1067,7 +1074,8 @@
 
     cancel.addEventListener('click', () => {
       document.getElementById('mood-note-wrap').classList.add('hidden');
-      document.getElementById('mood-note').value = '';
+      note.value = '';
+      count.textContent = '0';
       document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('selected'));
     });
   }
@@ -1470,7 +1478,9 @@
       const input = document.getElementById('garden-input');
       const count = document.getElementById('garden-count');
       const submit = document.getElementById('garden-submit');
-      input.addEventListener('input', () => { count.textContent = input.value.length; });
+      if (input && count) {
+        input.addEventListener('input', () => { count.textContent = input.value.length; });
+      }
       submit.addEventListener('click', () => {
         const text = input.value.trim().slice(0, 140);
         if (!text) return;
